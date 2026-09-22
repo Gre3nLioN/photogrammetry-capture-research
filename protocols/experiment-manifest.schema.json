@@ -24,7 +24,9 @@
         "strategy": {"enum": ["full", "stride", "random", "sector-removal", "contiguous-gap", "explicit"]},
         "parameters": {"type": "object"},
         "selected_image_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-        "excluded_image_ids": {"type": "array", "items": {"type": "string"}}
+        "selected_image_names": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "excluded_image_ids": {"type": "array", "items": {"type": "string"}},
+        "excluded_image_names": {"type": "array", "items": {"type": "string"}}
       }
     },
     "transformations": {"type": "array", "items": {"type": "object", "required": ["kind", "parameters"]}},

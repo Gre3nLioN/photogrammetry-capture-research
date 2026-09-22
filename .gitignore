@@ -8,5 +8,8 @@ dist/
 # Never commit raw or derived image data, reconstruction outputs, or large metrics.
 experiments/*/derived/
 experiments/*/colmap/
+experiments/*/logs/
+experiments/*/run.log
+experiments/*/run.pid
 results/*.parquet
 results/figures/*.png

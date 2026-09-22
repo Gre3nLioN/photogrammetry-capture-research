@@ -138,7 +138,11 @@ def create_manifest(
             "strategy": strategy,
             "parameters": parameters,
             "selected_image_ids": selected_ids,
+            "selected_image_names": [item["name"] for item in selected],
             "excluded_image_ids": excluded_ids,
+            "excluded_image_names": [
+                item["name"] for item in images if item["id"] in set(excluded_ids)
+            ],
         },
         "transformations": transformation_list,
         "subset_fingerprint_sha256": subset_fingerprint,
@@ -183,8 +187,10 @@ def compare_experiment(experiment_dir: Path, quality_report_path: Path) -> dict[
         raise ExperimentError(
             "Experiment report must be a ReconCheck photogrammetry-quality-report"
         )
-    expected = set(manifest["selection"]["selected_image_ids"])
-    actual = {str(item["id"]) for item in experiment["input_image_health"]["per_image"]}
+    expected = set(manifest["selection"].get("selected_image_names", []))
+    if not expected:
+        raise ExperimentError("Manifest has no stable selected_image_names")
+    actual = {str(item["name"]) for item in experiment["input_image_health"]["per_image"]}
     if expected != actual:
         missing, unexpected = sorted(expected - actual), sorted(actual - expected)
         raise ExperimentError(
@@ -236,6 +242,22 @@ def compare_experiment(experiment_dir: Path, quality_report_path: Path) -> dict[
         }
         for name, passed in baseline_checks.items()
     ]
+    failed = [item["metric"] for item in transitions if item["baseline"] and not item["experiment"]]
+    execution_path = experiment_dir / "execution.json"
+    execution = load_json(execution_path) if execution_path.is_file() else {}
+    stages = execution.get("stages", {})
+    duration = sum(float(stage.get("duration_seconds", 0.0)) for stage in stages.values())
+    derived_bytes = sum(
+        path.stat().st_size
+        for path in experiment_dir.rglob("*")
+        if path.is_file() and not path.is_symlink()
+    )
+    conclusion = (
+        f"The condition changed the quality verdict from {baseline['verdict']['status']} "
+        f"to {experiment['verdict']['status']}; failed requirements: {', '.join(failed)}."
+        if failed
+        else f"The condition retained the {experiment['verdict']['status']} quality verdict."
+    )
     return {
         "schema_version": 1,
         "experiment_id": manifest["experiment_id"],
@@ -247,7 +269,19 @@ def compare_experiment(experiment_dir: Path, quality_report_path: Path) -> dict[
             "checks": transitions,
         },
         "metrics": comparison_metrics,
-        "conclusion": "Pending researcher interpretation.",
+        "execution": {
+            "status": execution.get("status", "not recorded"),
+            "total_stage_duration_seconds": duration,
+            "derived_storage_bytes": derived_bytes,
+            "stages": {
+                name: {
+                    "exit_code": stage.get("exit_code"),
+                    "duration_seconds": stage.get("duration_seconds"),
+                }
+                for name, stage in stages.items()
+            },
+        },
+        "conclusion": conclusion,
         "limitations": [
             "Internal reconstruction consistency is not absolute geometric accuracy.",
             "This condition must be interpreted with its recorded reconstruction recipe "
@@ -262,6 +296,9 @@ def write_comparison(experiment_dir: Path, quality_report_path: Path) -> Path:
     target.write_text(json.dumps(comparison, indent=2) + "\n", encoding="utf-8")
     quality_target = experiment_dir / "reconcheck-quality-report.json"
     quality_target.write_text(quality_report_path.read_text(encoding="utf-8"), encoding="utf-8")
+    changed_checks = [
+        item["metric"] for item in comparison["quality_transition"]["checks"] if item["changed"]
+    ]
     report = "\n".join(
         [
             f"# {comparison['experiment_id']}",
@@ -270,10 +307,22 @@ def write_comparison(experiment_dir: Path, quality_report_path: Path) -> Path:
             "",
             f"- Baseline: **{comparison['quality_transition']['baseline']}**",
             f"- Experiment: **{comparison['quality_transition']['experiment']}**",
+            f"- Changed checks: {', '.join(changed_checks) if changed_checks else 'none'}",
             "",
-            "## Interpretation",
+            "## Conclusion",
             "",
-            "Pending researcher interpretation. See `comparison.json` for machine-readable deltas.",
+            str(comparison["conclusion"]),
+            "",
+            "## Execution",
+            "",
+            f"- Status: `{comparison['execution']['status']}`",
+            "- Total stage duration: "
+            f"{comparison['execution']['total_stage_duration_seconds']:.1f} seconds",
+            f"- Derived storage: {comparison['execution']['derived_storage_bytes']:,} bytes",
+            "",
+            "## Limitations",
+            "",
+            *[f"- {value}" for value in comparison["limitations"]],
             "",
         ]
     )
