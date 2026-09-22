@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Photogrammetry Capture Research Comparison",
+  "type": "object",
+  "required": ["schema_version", "experiment_id", "baseline_fingerprint_sha256", "experiment_fingerprint_sha256", "quality_transition", "metrics"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "experiment_id": {"type": "string"},
+    "baseline_fingerprint_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "experiment_fingerprint_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "quality_transition": {"type": "object", "required": ["baseline", "experiment"]},
+    "metrics": {"type": "array", "items": {"type": "object", "required": ["name", "baseline", "experiment", "absolute_delta"]}},
+    "conclusion": {"type": "string"},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}

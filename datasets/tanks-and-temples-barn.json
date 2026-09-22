@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "dataset_id": "tanks-and-temples-barn",
+  "name": "Tanks and Temples — Barn training image set",
+  "raw_data_policy": "immutable external source; this repository stores no raw images",
+  "canonical_dataset_page": "https://www.tanksandtemples.org/download/",
+  "license_page": "https://www.tanksandtemples.org/license/",
+  "local_reference_path": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-quality-auditor/raw/tanks-and-temples/barn",
+  "archive_sha256": "98812a995730b997a6842d9fbe2ae3fbef71a1f448e8ef85adc4885597701240",
+  "images_tree_sha256": "e7a1a7567182abef03cfa30282826559cb739a0c26a3048d38c0a047a9122804",
+  "image_count": 410,
+  "reference_reconstruction": {
+    "reconcheck_quality_report": "external platform cache; fingerprint f4d0695a4f80eab1c8bff50a4777e53bb4b421c999445afde5b1083cb3654d31",
+    "registered_images": 410,
+    "sparse_points": 206801
+  }
+}

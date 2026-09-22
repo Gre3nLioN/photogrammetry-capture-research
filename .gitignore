@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+dist/
+*.egg-info/
+
+# Never commit raw or derived image data, reconstruction outputs, or large metrics.
+experiments/*/derived/
+experiments/*/colmap/
+results/*.parquet
+results/figures/*.png
