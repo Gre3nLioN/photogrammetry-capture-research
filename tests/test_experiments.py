@@ -7,6 +7,8 @@ from photogrammetry_capture_research.experiments import (
     ExperimentError,
     compare_experiment,
     create_manifest,
+    select_images,
+    trajectory_sectors,
     write_experiment,
 )
 
@@ -54,6 +56,35 @@ def test_random_selection_requires_seed(tmp_path: Path) -> None:
 
     with pytest.raises(ExperimentError, match="explicit --seed"):
         create_manifest(experiment_id="random", baseline_path=baseline, strategy="random", count=2)
+
+
+def test_sector_removal_preserves_budget_and_removes_pca_sector() -> None:
+    images = [{"id": str(index), "name": f"frame-{index}.jpg"} for index in range(8)]
+    scene = {
+        "cameras": [
+            {"image_id": str(index), "center": [float(index % 4), float(index // 4), 0.0]}
+            for index in range(8)
+        ]
+    }
+    sector_by_id, _ = trajectory_sectors(scene)
+    removed = next(iter(sector_by_id.values()))
+
+    selected, parameters = select_images(
+        images, "sector-removal", count=4, sectors=(removed,), scene=scene
+    )
+
+    assert len(selected) == 4
+    assert all(sector_by_id[item["id"]] != removed for item in selected)
+    assert parameters["removed_sectors"] == [removed]
+
+
+def test_uneven_cadence_keeps_requested_budget() -> None:
+    images = [{"id": str(index), "name": f"frame-{index}.jpg"} for index in range(20)]
+
+    selected, parameters = select_images(images, "uneven-cadence", count=8, profile="burst-middle")
+
+    assert len(selected) == 8
+    assert parameters["burst_selected_count"] == 4
 
 
 def test_compare_rejects_manifest_image_mismatch(tmp_path: Path) -> None:

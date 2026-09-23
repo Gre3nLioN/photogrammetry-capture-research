@@ -7,6 +7,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 
 class ExperimentError(ValueError):
     """Raised when an experiment cannot be created or compared reproducibly."""
@@ -40,6 +42,37 @@ def baseline_images(report: dict[str, Any]) -> list[dict[str, str]]:
     return images
 
 
+def evenly_sample(images: list[dict[str, str]], count: int) -> list[dict[str, str]]:
+    if not 1 <= count <= len(images):
+        raise ExperimentError(f"Selection count must be between 1 and {len(images)}")
+    indexes = [(index * len(images)) // count for index in range(count)]
+    return [images[index] for index in indexes]
+
+
+def trajectory_sectors(scene: dict[str, Any]) -> tuple[dict[str, int], dict[str, object]]:
+    cameras = scene.get("cameras", [])
+    if not cameras:
+        raise ExperimentError("Scene manifest has no registered cameras")
+    centers = np.asarray([camera["center"] for camera in cameras], dtype=float)
+    centroid = centers.mean(axis=0)
+    _, _, basis = np.linalg.svd(centers - centroid, full_matrices=False)
+    plane_basis = basis[:2]
+    coordinates = (centers - centroid) @ plane_basis.T
+    angles = np.arctan2(coordinates[:, 1], coordinates[:, 0])
+    sectors = ((angles + np.pi) / (2 * np.pi) * 8).astype(int) % 8
+    mapping = {
+        str(camera["image_id"]): int(sector)
+        for camera, sector in zip(cameras, sectors, strict=True)
+    }
+    definition = {
+        "method": "eight azimuthal sectors in the first two PCA axes of registered camera centers",
+        "sector_count": 8,
+        "centroid": centroid.tolist(),
+        "plane_basis": plane_basis.tolist(),
+    }
+    return mapping, definition
+
+
 def select_images(
     images: list[dict[str, str]],
     strategy: str,
@@ -47,7 +80,10 @@ def select_images(
     every: int | None = None,
     count: int | None = None,
     seed: int | None = None,
-    sector: int | None = None,
+    sectors: tuple[int, ...] = (),
+    gap_start: int | None = None,
+    gap_count: int | None = None,
+    profile: str | None = None,
     scene: dict[str, Any] | None = None,
 ) -> tuple[list[dict[str, str]], dict[str, Any]]:
     if strategy == "stride":
@@ -62,29 +98,56 @@ def select_images(
         chosen = sorted(random.Random(seed).sample(images, count), key=lambda item: item["name"])
         return chosen, {"count": count, "seed": seed}
     if strategy == "sector-removal":
-        if scene is None or sector is None or not 0 <= sector < 8:
-            raise ExperimentError("Sector removal requires --scene and --sector 0 through 7")
-        cameras = scene.get("cameras", [])
-        if not cameras:
-            raise ExperimentError("Scene manifest has no registered cameras for sector removal")
-        centers = [camera["center"] for camera in cameras]
-        centroid = [sum(center[index] for center in centers) / len(centers) for index in range(2)]
-        removed_ids = set()
-        for camera in cameras:
-            dx, dy = camera["center"][0] - centroid[0], camera["center"][1] - centroid[1]
-            angle = __import__("math").atan2(dy, dx)
-            camera_sector = (
-                int((angle + __import__("math").pi) / (2 * __import__("math").pi) * 8) % 8
-            )
-            if camera_sector == sector:
-                removed_ids.add(str(camera["image_id"]))
-        selected = [image for image in images if image["id"] not in removed_ids]
-        if not selected:
-            raise ExperimentError(f"Sector {sector} removes every image")
+        if scene is None or not sectors or any(not 0 <= sector < 8 for sector in sectors):
+            raise ExperimentError("Sector removal requires --scene and --sectors in 0 through 7")
+        if count is None:
+            raise ExperimentError("Sector removal requires --count to preserve image budget")
+        sector_by_id, definition = trajectory_sectors(scene)
+        candidates = [
+            image for image in images if sector_by_id.get(image["id"]) not in set(sectors)
+        ]
+        selected = evenly_sample(candidates, count)
         return selected, {
-            "removed_sectors": [sector],
-            "sector_count": 8,
-            "removed_image_count": len(removed_ids),
+            "removed_sectors": list(sectors),
+            "candidate_count": len(candidates),
+            "sampling": "even-over-retained-trajectory",
+            "sector_definition": definition,
+        }
+    if strategy == "contiguous-gap":
+        if count is None or gap_start is None or gap_count is None or gap_count < 1:
+            raise ExperimentError("Contiguous gap requires --count, --gap-start, and --gap-count")
+        if not 0 <= gap_start < len(images) or gap_start + gap_count > len(images):
+            raise ExperimentError("Contiguous gap is outside the ordered source-image range")
+        candidates = images[:gap_start] + images[gap_start + gap_count :]
+        return evenly_sample(candidates, count), {
+            "gap_start": gap_start,
+            "gap_count": gap_count,
+            "candidate_count": len(candidates),
+            "sampling": "even-over-retained-trajectory",
+        }
+    if strategy == "uneven-cadence":
+        if count is None or profile not in {"burst-start", "burst-middle", "burst-end"}:
+            raise ExperimentError(
+                "Uneven cadence requires --count and a burst-start, burst-middle, "
+                "or burst-end profile"
+            )
+        span = max(1, len(images) // 5)
+        offsets = {
+            "burst-start": 0,
+            "burst-middle": (len(images) - span) // 2,
+            "burst-end": len(images) - span,
+        }
+        start = offsets[profile]
+        burst = images[start : start + span]
+        burst_count = min(len(burst), count // 2)
+        remaining = images[:start] + images[start + span :]
+        selected = evenly_sample(burst, burst_count) + evenly_sample(remaining, count - burst_count)
+        return sorted(selected, key=lambda image: images.index(image)), {
+            "profile": profile,
+            "burst_window_start": start,
+            "burst_window_count": span,
+            "burst_selected_count": burst_count,
+            "sampling": "half-budget-in-one-fifth-of-route",
         }
     raise ExperimentError(f"Unsupported selection strategy: {strategy}")
 
@@ -97,7 +160,10 @@ def create_manifest(
     every: int | None = None,
     count: int | None = None,
     seed: int | None = None,
-    sector: int | None = None,
+    sectors: tuple[int, ...] = (),
+    gap_start: int | None = None,
+    gap_count: int | None = None,
+    profile: str | None = None,
     scene_path: Path | None = None,
     hypothesis: str = "",
     transformations: list[dict[str, Any]] | None = None,
@@ -110,7 +176,16 @@ def create_manifest(
     images = baseline_images(baseline)
     scene = load_json(scene_path) if scene_path else None
     selected, parameters = select_images(
-        images, strategy, every=every, count=count, seed=seed, sector=sector, scene=scene
+        images,
+        strategy,
+        every=every,
+        count=count,
+        seed=seed,
+        sectors=sectors,
+        gap_start=gap_start,
+        gap_count=gap_count,
+        profile=profile,
+        scene=scene,
     )
     selected_ids = [item["id"] for item in selected]
     excluded_ids = [item["id"] for item in images if item["id"] not in set(selected_ids)]

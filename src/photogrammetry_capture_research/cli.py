@@ -25,11 +25,26 @@ def build_parser() -> argparse.ArgumentParser:
     create.add_argument(
         "--output", type=Path, default=Path("experiments"), help="Experiment output root"
     )
-    create.add_argument("--strategy", choices=["stride", "random", "sector-removal"], required=True)
+    create.add_argument(
+        "--strategy",
+        choices=["stride", "random", "sector-removal", "contiguous-gap", "uneven-cadence"],
+        required=True,
+    )
     create.add_argument("--every", type=int, help="Keep every Nth image for stride selection")
     create.add_argument("--count", type=int, help="Number of images for random selection")
     create.add_argument("--seed", type=int, help="Required fixed seed for random selection")
-    create.add_argument("--sector", type=int, help="Sector 0–7 to remove")
+    create.add_argument("--sectors", help="Comma-separated PCA trajectory sectors (0–7) to remove")
+    create.add_argument(
+        "--gap-start", type=int, help="First source-order index in a contiguous gap"
+    )
+    create.add_argument(
+        "--gap-count", type=int, help="Number of source-order images in a contiguous gap"
+    )
+    create.add_argument(
+        "--profile",
+        choices=["burst-start", "burst-middle", "burst-end"],
+        help="Uneven video-cadence profile",
+    )
     create.add_argument(
         "--scene", type=Path, help="ReconCheck scene manifest; required for sector removal"
     )
@@ -58,7 +73,12 @@ def main(argv: list[str] | None = None) -> int:
                 every=args.every,
                 count=args.count,
                 seed=args.seed,
-                sector=args.sector,
+                sectors=tuple(int(value) for value in args.sectors.split(","))
+                if args.sectors
+                else (),
+                gap_start=args.gap_start,
+                gap_count=args.gap_count,
+                profile=args.profile,
                 scene_path=args.scene,
                 hypothesis=args.hypothesis,
             )
