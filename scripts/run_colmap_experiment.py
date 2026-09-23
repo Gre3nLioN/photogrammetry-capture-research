@@ -235,6 +235,9 @@ def main() -> int:
             break
     else:
         execution["status"] = "complete"
+    (experiment / "execution.json").write_text(
+        json.dumps(execution, indent=2) + "\n", encoding="utf-8"
+    )
     if sparse_model.is_dir():
         dense_cloud = dense_root / "fused.ply"
         mesh = dense_root / "mesh.ply"
