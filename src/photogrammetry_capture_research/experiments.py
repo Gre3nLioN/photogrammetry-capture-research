@@ -61,8 +61,7 @@ def trajectory_sectors(scene: dict[str, Any]) -> tuple[dict[str, int], dict[str,
     angles = np.arctan2(coordinates[:, 1], coordinates[:, 0])
     sectors = ((angles + np.pi) / (2 * np.pi) * 8).astype(int) % 8
     mapping = {
-        str(camera["image_id"]): int(sector)
-        for camera, sector in zip(cameras, sectors, strict=True)
+        str(camera["name"]): int(sector) for camera, sector in zip(cameras, sectors, strict=True)
     }
     definition = {
         "method": "eight azimuthal sectors in the first two PCA axes of registered camera centers",
@@ -104,7 +103,7 @@ def select_images(
             raise ExperimentError("Sector removal requires --count to preserve image budget")
         sector_by_id, definition = trajectory_sectors(scene)
         candidates = [
-            image for image in images if sector_by_id.get(image["id"]) not in set(sectors)
+            image for image in images if sector_by_id.get(image["name"]) not in set(sectors)
         ]
         selected = evenly_sample(candidates, count)
         return selected, {

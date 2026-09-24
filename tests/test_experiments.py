@@ -62,7 +62,10 @@ def test_sector_removal_preserves_budget_and_removes_pca_sector() -> None:
     images = [{"id": str(index), "name": f"frame-{index}.jpg"} for index in range(8)]
     scene = {
         "cameras": [
-            {"image_id": str(index), "center": [float(index % 4), float(index // 4), 0.0]}
+            {
+                "name": f"frame-{index}.jpg",
+                "center": [float(index % 4), float(index // 4), 0.0],
+            }
             for index in range(8)
         ]
     }
@@ -74,7 +77,7 @@ def test_sector_removal_preserves_budget_and_removes_pca_sector() -> None:
     )
 
     assert len(selected) == 4
-    assert all(sector_by_id[item["id"]] != removed for item in selected)
+    assert all(sector_by_id[item["name"]] != removed for item in selected)
     assert parameters["removed_sectors"] == [removed]
 
 
