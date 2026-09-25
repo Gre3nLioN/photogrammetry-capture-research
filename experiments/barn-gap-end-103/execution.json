@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "status": "pending",
+  "note": "Record the immutable reconstruction recipe, tool versions, timings, and output paths after reconstruction."
+}
