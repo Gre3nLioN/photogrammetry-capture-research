@@ -253,7 +253,11 @@ def nested(payload: dict[str, Any], *keys: str) -> Any:
     return value
 
 
-def compare_experiment(experiment_dir: Path, quality_report_path: Path) -> dict[str, Any]:
+def compare_experiment(
+    experiment_dir: Path,
+    quality_report_path: Path,
+    reference_experiment: Path | None = None,
+) -> dict[str, Any]:
     manifest = load_json(experiment_dir / "experiment-manifest.json")
     baseline = load_json(Path(str(manifest["baseline"]["quality_report"])))
     experiment = load_json(quality_report_path)
@@ -326,11 +330,40 @@ def compare_experiment(experiment_dir: Path, quality_report_path: Path) -> dict[
         for path in experiment_dir.rglob("*")
         if path.is_file() and not path.is_symlink()
     )
-    conclusion = (
-        f"The condition changed the quality verdict from {baseline['verdict']['status']} "
-        f"to {experiment['verdict']['status']}; failed requirements: {', '.join(failed)}."
+    if reference_experiment is None:
+        candidate = Path(str(manifest["baseline"]["quality_report"])).parent
+        reference_experiment = (
+            candidate if (candidate / "colmap/dense/fused.ply").is_file() else None
+        )
+    if reference_experiment is None:
+        completeness: dict[str, Any] = {
+            "status": "unavailable",
+            "scope": "No controlled dense-reference experiment was provided.",
+        }
+    else:
+        from photogrammetry_capture_research.completeness import evaluate_dense_completeness
+
+        completeness = evaluate_dense_completeness(reference_experiment, experiment_dir)
+    internal_verdict = str(experiment["verdict"]["status"])
+    completeness_status = completeness["status"]
+    task_verdict = (
+        "poor"
+        if completeness_status == "incomplete"
+        else "warning"
+        if completeness_status == "partially_complete"
+        else internal_verdict
+        if completeness_status == "complete"
+        else "unverified"
+    )
+    internal_conclusion = (
+        f"Internal consistency changed from {baseline['verdict']['status']} to {internal_verdict}; "
+        f"failed requirements: {', '.join(failed)}."
         if failed
-        else f"The condition retained the {experiment['verdict']['status']} quality verdict."
+        else f"Internal consistency retained the {internal_verdict} verdict."
+    )
+    conclusion = (
+        f"{internal_conclusion} Complete-object task verdict: {task_verdict} "
+        f"({completeness_status} reference completeness)."
     )
     return {
         "schema_version": 1,
@@ -339,9 +372,11 @@ def compare_experiment(experiment_dir: Path, quality_report_path: Path) -> dict[
         "experiment_fingerprint_sha256": experiment["dataset"]["source_fingerprint_sha256"],
         "quality_transition": {
             "baseline": baseline["verdict"]["status"],
-            "experiment": experiment["verdict"]["status"],
+            "experiment": internal_verdict,
             "checks": transitions,
         },
+        "reference_completeness": completeness,
+        "task_verdict": task_verdict,
         "metrics": comparison_metrics,
         "execution": {
             "status": execution.get("status", "not recorded"),
@@ -364,8 +399,12 @@ def compare_experiment(experiment_dir: Path, quality_report_path: Path) -> dict[
     }
 
 
-def write_comparison(experiment_dir: Path, quality_report_path: Path) -> Path:
-    comparison = compare_experiment(experiment_dir, quality_report_path)
+def write_comparison(
+    experiment_dir: Path,
+    quality_report_path: Path,
+    reference_experiment: Path | None = None,
+) -> Path:
+    comparison = compare_experiment(experiment_dir, quality_report_path, reference_experiment)
     target = experiment_dir / "comparison.json"
     target.write_text(json.dumps(comparison, indent=2) + "\n", encoding="utf-8")
     quality_target = experiment_dir / "reconcheck-quality-report.json"
@@ -373,6 +412,8 @@ def write_comparison(experiment_dir: Path, quality_report_path: Path) -> Path:
     changed_checks = [
         item["metric"] for item in comparison["quality_transition"]["checks"] if item["changed"]
     ]
+    completeness = comparison["reference_completeness"]
+    largest_missing = completeness.get("largest_missing_component", {})
     report = "\n".join(
         [
             f"# {comparison['experiment_id']}",
@@ -382,6 +423,24 @@ def write_comparison(experiment_dir: Path, quality_report_path: Path) -> Path:
             f"- Baseline: **{comparison['quality_transition']['baseline']}**",
             f"- Experiment: **{comparison['quality_transition']['experiment']}**",
             f"- Changed checks: {', '.join(changed_checks) if changed_checks else 'none'}",
+            "",
+            "## Reference Completeness",
+            "",
+            f"- Status: **{completeness['status']}**",
+            f"- Complete-object task verdict: **{comparison['task_verdict']}**",
+            *(
+                [
+                    f"- Reference-surface recall: {completeness['reference_surface_recall']:.1%}",
+                    "- Missing reference surface: "
+                    f"{completeness['missing_reference_surface_fraction']:.1%}",
+                    f"- Distance tolerance: {completeness['distance_tolerance']:.4f}",
+                    "- Largest connected missing region: "
+                    f"{largest_missing['reference_surface_fraction']:.1%} of reference surface, "
+                    f"spanning {largest_missing['bounding_box_diagonal']:.2f}",
+                ]
+                if completeness["status"] != "unavailable"
+                else [f"- Note: {completeness['scope']}"]
+            ),
             "",
             "## Conclusion",
             "",

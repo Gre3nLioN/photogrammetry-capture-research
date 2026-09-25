@@ -51,6 +51,30 @@
       }
     ]
   },
+  "reference_completeness": {
+    "method": "dense-reference-recall-v1",
+    "reference_experiment": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-full-controlled",
+    "shared_camera_count": 103,
+    "similarity_alignment": {
+      "scale": 0.9351433588255135,
+      "camera_center_rmse": 0.003926177219209352
+    },
+    "reference_point_sample_count": 249473,
+    "experiment_point_sample_count": 528874,
+    "scene_diagonal": 38.32943271297957,
+    "distance_tolerance": 0.19164716356489783,
+    "reference_surface_recall": 0.9836655670152682,
+    "missing_reference_surface_fraction": 0.016334432984731806,
+    "largest_missing_component": {
+      "reference_point_count": 1264,
+      "voxel_count": 147,
+      "bounding_box_diagonal": 8.689883438912155,
+      "reference_surface_fraction": 0.005066680562626016
+    },
+    "status": "complete",
+    "scope": "Dense-cloud recall against the controlled full-capture reference; it estimates completeness, not absolute geometric accuracy."
+  },
+  "task_verdict": "good",
   "metrics": [
     {
       "name": "registration_ratio",
@@ -98,7 +122,7 @@
   "execution": {
     "status": "complete",
     "total_stage_duration_seconds": 8102.580000000001,
-    "derived_storage_bytes": 3039901813,
+    "derived_storage_bytes": 3039903003,
     "stages": {
       "feature-extractor": {
         "exit_code": 0,
@@ -130,7 +154,7 @@
       }
     }
   },
-  "conclusion": "The condition retained the good quality verdict.",
+  "conclusion": "Internal consistency retained the good verdict. Complete-object task verdict: good (complete reference completeness).",
   "limitations": [
     "Internal reconstruction consistency is not absolute geometric accuracy.",
     "This condition must be interpreted with its recorded reconstruction recipe and repetitions."

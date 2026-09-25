@@ -54,6 +54,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     compare.add_argument("--experiment", type=Path, required=True, help="Experiment directory")
     compare.add_argument(
+        "--reference-experiment",
+        type=Path,
+        help="Controlled full-capture experiment used for dense-reference completeness",
+    )
+    compare.add_argument(
         "--quality-report",
         type=Path,
         required=True,
@@ -90,7 +95,7 @@ def main(argv: list[str] | None = None) -> int:
                 f"of {len(manifest['source_images'])} images"
             )
         elif args.command == "compare":
-            path = write_comparison(args.experiment, args.quality_report)
+            path = write_comparison(args.experiment, args.quality_report, args.reference_experiment)
             print(f"Wrote comparison: {path}")
         return 0
     except ExperimentError as error:

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "experiment_id": "barn-stride-5",
-  "baseline_fingerprint_sha256": "f4d0695a4f80eab1c8bff50a4777e53bb4b421c999445afde5b1083cb3654d31",
-  "experiment_fingerprint_sha256": "124c7b9a53f4ccbba2df2af2a88643c7abcbcdd35690f569bb821d10d3189b8d",
+  "experiment_id": "barn-sectors-0-1-103",
+  "baseline_fingerprint_sha256": "6bacdd999987f641668d9195bdddb1364cdedd5e5013be5fd798b838996c3611",
+  "experiment_fingerprint_sha256": "781a2bbefd3a0682122b5f452299f36e6d09ce2d277fe11180bae64f124e9fc7",
   "quality_transition": {
     "baseline": "good",
-    "experiment": "warning",
+    "experiment": "good",
     "checks": [
       {
         "metric": "registration_ratio",
@@ -22,8 +22,8 @@
       {
         "metric": "median_track_length",
         "baseline": true,
-        "experiment": false,
-        "changed": true
+        "experiment": true,
+        "changed": false
       },
       {
         "metric": "median_view_angle_deg",
@@ -54,27 +54,27 @@
   "reference_completeness": {
     "method": "dense-reference-recall-v1",
     "reference_experiment": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-full-controlled",
-    "shared_camera_count": 82,
+    "shared_camera_count": 103,
     "similarity_alignment": {
-      "scale": 0.9710118477836589,
-      "camera_center_rmse": 0.0027986673282699463
+      "scale": 0.9116535709739046,
+      "camera_center_rmse": 0.011446734396674898
     },
     "reference_point_sample_count": 249473,
-    "experiment_point_sample_count": 821702,
+    "experiment_point_sample_count": 580871,
     "scene_diagonal": 38.32943271297957,
     "distance_tolerance": 0.19164716356489783,
-    "reference_surface_recall": 0.9690868350482817,
-    "missing_reference_surface_fraction": 0.030913164951718253,
+    "reference_surface_recall": 0.9361814705398981,
+    "missing_reference_surface_fraction": 0.06381852946010191,
     "largest_missing_component": {
-      "reference_point_count": 4136,
-      "voxel_count": 385,
-      "bounding_box_diagonal": 14.928809698545702,
-      "reference_surface_fraction": 0.016578948423276268
+      "reference_point_count": 7827,
+      "voxel_count": 51,
+      "bounding_box_diagonal": 4.020024817471542,
+      "reference_surface_fraction": 0.0313741366801217
     },
-    "status": "partially_complete",
+    "status": "incomplete",
     "scope": "Dense-cloud recall against the controlled full-capture reference; it estimates completeness, not absolute geometric accuracy."
   },
-  "task_verdict": "warning",
+  "task_verdict": "poor",
   "metrics": [
     {
       "name": "registration_ratio",
@@ -85,76 +85,76 @@
     },
     {
       "name": "reprojection_p95_px",
-      "baseline": 1.3809257180970385,
-      "experiment": 1.5094814498703044,
-      "absolute_delta": 0.12855573177326596,
-      "relative_delta": 0.0930938790468904
+      "baseline": 1.6206568359270197,
+      "experiment": 1.6012773836885446,
+      "absolute_delta": -0.019379452238475148,
+      "relative_delta": -0.011957776506949451
     },
     {
       "name": "median_track_length",
-      "baseline": 4,
-      "experiment": 3,
-      "absolute_delta": -1,
-      "relative_delta": -0.25
+      "baseline": 4.0,
+      "experiment": 4.0,
+      "absolute_delta": 0.0,
+      "relative_delta": 0.0
     },
     {
       "name": "median_view_angle_deg",
-      "baseline": 9.402615476658232,
-      "experiment": 14.036665320967252,
-      "absolute_delta": 4.63404984430902,
-      "relative_delta": 0.4928468951870826
+      "baseline": 8.969282426468446,
+      "experiment": 12.581568338038343,
+      "absolute_delta": 3.612285911569897,
+      "relative_delta": 0.40273967746962713
     },
     {
       "name": "coverage_sector_ratio",
       "baseline": 1.0,
-      "experiment": 0.875,
-      "absolute_delta": -0.125,
-      "relative_delta": -0.125
+      "experiment": 1.0,
+      "absolute_delta": 0.0,
+      "relative_delta": 0.0
     },
     {
       "name": "sparse_point_count",
-      "baseline": 206801,
-      "experiment": 17849,
-      "absolute_delta": -188952,
-      "relative_delta": -0.9136899724856263
+      "baseline": 206930,
+      "experiment": 31120,
+      "absolute_delta": -175810,
+      "relative_delta": -0.8496109795583048
     }
   ],
   "execution": {
     "status": "complete",
-    "total_stage_duration_seconds": 5573.053,
-    "derived_storage_bytes": 2440995951,
+    "total_stage_duration_seconds": 7849.103999999999,
+    "derived_storage_bytes": 3065711494,
     "stages": {
       "feature-extractor": {
         "exit_code": 0,
-        "duration_seconds": 13.578
+        "duration_seconds": 16.885
       },
       "exhaustive-matcher": {
         "exit_code": 0,
-        "duration_seconds": 3027.743
+        "duration_seconds": 4279.226
       },
       "mapper": {
         "exit_code": 0,
-        "duration_seconds": 198.981
+        "duration_seconds": 451.684
       },
       "image-undistorter": {
         "exit_code": 0,
-        "duration_seconds": 49.212
+        "duration_seconds": 64.282
       },
       "patch-match-stereo": {
         "exit_code": 0,
-        "duration_seconds": 1748.214
+        "duration_seconds": 2177.305
       },
       "stereo-fusion": {
         "exit_code": 0,
-        "duration_seconds": 407.533
+        "duration_seconds": 702.624
       },
       "poisson-mesher": {
         "exit_code": 0,
-        "duration_seconds": 127.792
+        "duration_seconds": 157.098
       }
     }
   },
-  "conclusion": "Internal consistency changed from good to warning; failed requirements: median_track_length. Complete-object task verdict: warning (partially_complete reference completeness).",
+  "conclusion": "Internal consistency retained the good verdict. Complete-object task verdict: poor (incomplete reference completeness).",
   "limitations": [
     "Internal reconstruction consistency is not absolute geometric accuracy.",
     "This condition must be interpreted with its recorded reconstruction recipe and repetitions."

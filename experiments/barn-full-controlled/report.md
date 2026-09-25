@@ -6,15 +6,24 @@
 - Experiment: **good**
 - Changed checks: none
 
+## Reference Completeness
+
+- Status: **complete**
+- Complete-object task verdict: **good**
+- Reference-surface recall: 100.0%
+- Missing reference surface: 0.0%
+- Distance tolerance: 0.1916
+- Largest connected missing region: 0.0% of reference surface, spanning 1.58
+
 ## Conclusion
 
-The condition retained the good quality verdict.
+Internal consistency retained the good verdict. Complete-object task verdict: good (complete reference completeness).
 
 ## Execution
 
 - Status: `complete`
 - Total stage duration: 90658.1 seconds
-- Derived storage: 12,312,603,614 bytes
+- Derived storage: 12,313,082,301 bytes
 
 ## Limitations
 

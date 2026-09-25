@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+from photogrammetry_capture_research.completeness import classify_completeness
 from photogrammetry_capture_research.experiments import (
     ExperimentError,
     compare_experiment,
@@ -79,6 +80,12 @@ def test_sector_removal_preserves_budget_and_removes_pca_sector() -> None:
     assert len(selected) == 4
     assert all(sector_by_id[item["name"]] != removed for item in selected)
     assert parameters["removed_sectors"] == [removed]
+
+
+def test_completeness_classification_is_conservative() -> None:
+    assert classify_completeness(0.97, 0.019) == "complete"
+    assert classify_completeness(0.96, 0.019) == "partially_complete"
+    assert classify_completeness(0.98, 0.02) == "incomplete"
 
 
 def test_uneven_cadence_keeps_requested_budget() -> None:
