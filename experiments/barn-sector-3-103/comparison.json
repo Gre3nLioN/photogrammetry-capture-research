@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "experiment_id": "barn-sector-3-103",
+  "baseline_fingerprint_sha256": "6bacdd999987f641668d9195bdddb1364cdedd5e5013be5fd798b838996c3611",
+  "experiment_fingerprint_sha256": "35230b506a88b09c971bc09ab102443eee8959796c8dc50728d878e6151aa567",
+  "quality_transition": {
+    "baseline": "good",
+    "experiment": "good",
+    "checks": [
+      {
+        "metric": "registration_ratio",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "reprojection_p95_px",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "median_track_length",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "median_view_angle_deg",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "coverage_sector_ratio",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "dense_output",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "mesh_output",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      }
+    ]
+  },
+  "metrics": [
+    {
+      "name": "registration_ratio",
+      "baseline": 1.0,
+      "experiment": 1.0,
+      "absolute_delta": 0.0,
+      "relative_delta": 0.0
+    },
+    {
+      "name": "reprojection_p95_px",
+      "baseline": 1.6206568359270197,
+      "experiment": 1.5785347534544911,
+      "absolute_delta": -0.04212208247252858,
+      "relative_delta": -0.025990747417194364
+    },
+    {
+      "name": "median_track_length",
+      "baseline": 4.0,
+      "experiment": 4.0,
+      "absolute_delta": 0.0,
+      "relative_delta": 0.0
+    },
+    {
+      "name": "median_view_angle_deg",
+      "baseline": 8.969282426468446,
+      "experiment": 12.852234170471153,
+      "absolute_delta": 3.882951744002707,
+      "relative_delta": 0.4329166547977211
+    },
+    {
+      "name": "coverage_sector_ratio",
+      "baseline": 1.0,
+      "experiment": 0.875,
+      "absolute_delta": -0.125,
+      "relative_delta": -0.125
+    },
+    {
+      "name": "sparse_point_count",
+      "baseline": 206930,
+      "experiment": 30008,
+      "absolute_delta": -176922,
+      "relative_delta": -0.8549847774609771
+    }
+  ],
+  "execution": {
+    "status": "complete",
+    "total_stage_duration_seconds": 8483.264,
+    "derived_storage_bytes": 3061627779,
+    "stages": {
+      "feature-extractor": {
+        "exit_code": 0,
+        "duration_seconds": 16.579
+      },
+      "exhaustive-matcher": {
+        "exit_code": 0,
+        "duration_seconds": 4990.162
+      },
+      "mapper": {
+        "exit_code": 0,
+        "duration_seconds": 416.259
+      },
+      "image-undistorter": {
+        "exit_code": 0,
+        "duration_seconds": 62.55
+      },
+      "patch-match-stereo": {
+        "exit_code": 0,
+        "duration_seconds": 2191.77
+      },
+      "stereo-fusion": {
+        "exit_code": 0,
+        "duration_seconds": 656.274
+      },
+      "poisson-mesher": {
+        "exit_code": 0,
+        "duration_seconds": 149.67
+      }
+    }
+  },
+  "conclusion": "The condition retained the good quality verdict.",
+  "limitations": [
+    "Internal reconstruction consistency is not absolute geometric accuracy.",
+    "This condition must be interpreted with its recorded reconstruction recipe and repetitions."
+  ]
+}
