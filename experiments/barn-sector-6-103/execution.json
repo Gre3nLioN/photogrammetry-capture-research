@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "started_at_utc": "2026-09-25T09:00:53.405455+00:00",
+  "software": {
+    "colmap_version": "COLMAP 4.1.0 (Commit fa8e3b3ff on 2026-06-26 with CUDA)",
+    "python": "3.11.16 (main, Aug 25 2026, 14:00:53) [Clang 22.1.3 ]",
+    "platform": "Linux-7.2.5-3-omarchy-x86_64-with-glibc2.44"
+  },
+  "inputs": {
+    "source_images": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-quality-auditor/raw/tanks-and-temples/barn/extracted/Barn",
+    "derived_images": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/derived/images",
+    "selected_image_count": 103,
+    "subset_fingerprint_sha256": "341d364d9ea16c67f875185a65ecef47e7fcfa7510474c820b892db7a5dd9885"
+  },
+  "stages": {
+    "feature-extractor": {
+      "command": [
+        "colmap",
+        "feature_extractor",
+        "--database_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/colmap/database.db",
+        "--image_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/derived/images",
+        "--ImageReader.single_camera",
+        "1",
+        "--FeatureExtraction.use_gpu",
+        "1",
+        "--FeatureExtraction.gpu_index",
+        "0"
+      ],
+      "started_at_utc": "2026-09-25T09:00:53.467013+00:00",
+      "finished_at_utc": "2026-09-25T09:01:10.078524+00:00",
+      "duration_seconds": 16.612,
+      "exit_code": 0,
+      "log": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/logs/feature-extractor.log"
+    },
+    "exhaustive-matcher": {
+      "command": [
+        "colmap",
+        "exhaustive_matcher",
+        "--database_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/colmap/database.db",
+        "--FeatureMatching.use_gpu",
+        "1",
+        "--FeatureMatching.gpu_index",
+        "0"
+      ],
+      "started_at_utc": "2026-09-25T09:01:10.078869+00:00",
+      "finished_at_utc": "2026-09-25T10:14:39.083794+00:00",
+      "duration_seconds": 4409.005,
+      "exit_code": 0,
+      "log": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/logs/exhaustive-matcher.log"
+    },
+    "mapper": {
+      "command": [
+        "colmap",
+        "mapper",
+        "--database_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/colmap/database.db",
+        "--image_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/derived/images",
+        "--output_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/colmap/sparse"
+      ],
+      "started_at_utc": "2026-09-25T10:14:39.084036+00:00",
+      "finished_at_utc": "2026-09-25T10:21:33.672573+00:00",
+      "duration_seconds": 414.589,
+      "exit_code": 0,
+      "log": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/logs/mapper.log"
+    },
+    "image-undistorter": {
+      "command": [
+        "colmap",
+        "image_undistorter",
+        "--image_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/derived/images",
+        "--input_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/colmap/sparse/0",
+        "--output_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/colmap/dense",
+        "--output_type",
+        "COLMAP",
+        "--copy_policy",
+        "SOFT_LINK",
+        "--max_image_size",
+        "1200"
+      ],
+      "started_at_utc": "2026-09-25T10:21:33.672859+00:00",
+      "finished_at_utc": "2026-09-25T10:22:36.744567+00:00",
+      "duration_seconds": 63.072,
+      "exit_code": 0,
+      "log": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/logs/image-undistorter.log"
+    },
+    "patch-match-stereo": {
+      "command": [
+        "colmap",
+        "patch_match_stereo",
+        "--workspace_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/colmap/dense",
+        "--workspace_format",
+        "COLMAP",
+        "--PatchMatchStereo.gpu_index",
+        "0"
+      ],
+      "started_at_utc": "2026-09-25T10:22:36.744916+00:00",
+      "finished_at_utc": "2026-09-25T10:59:50.315134+00:00",
+      "duration_seconds": 2233.57,
+      "exit_code": 0,
+      "log": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/logs/patch-match-stereo.log"
+    },
+    "stereo-fusion": {
+      "command": [
+        "colmap",
+        "stereo_fusion",
+        "--workspace_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/colmap/dense",
+        "--workspace_format",
+        "COLMAP",
+        "--output_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/colmap/dense/fused.ply",
+        "--StereoFusion.max_image_size",
+        "1200"
+      ],
+      "started_at_utc": "2026-09-25T10:59:50.315545+00:00",
+      "finished_at_utc": "2026-09-25T11:10:44.896235+00:00",
+      "duration_seconds": 654.581,
+      "exit_code": 0,
+      "log": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/logs/stereo-fusion.log"
+    },
+    "poisson-mesher": {
+      "command": [
+        "colmap",
+        "poisson_mesher",
+        "--input_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/colmap/dense/fused.ply",
+        "--output_path",
+        "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/colmap/dense/mesh.ply"
+      ],
+      "started_at_utc": "2026-09-25T11:10:44.896558+00:00",
+      "finished_at_utc": "2026-09-25T11:13:11.967048+00:00",
+      "duration_seconds": 147.071,
+      "exit_code": 0,
+      "log": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/logs/poisson-mesher.log"
+    }
+  },
+  "reconcheck_cache": "/home/gre3nlion/.local/share/reconcheck/datasets/8806ebc22bb80004f93b559addfba42f48b58566439561ba2f52622e0ae334d0",
+  "quality_report": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-sector-6-103/reconcheck-quality-report.json",
+  "finished_at_utc": "2026-09-25T11:13:15.874060+00:00"
+}
