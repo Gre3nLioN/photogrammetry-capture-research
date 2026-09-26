@@ -40,7 +40,7 @@ Remove contiguous ordered segments of 10%, 20%, and 33% of source images. Repeat
 
 ### D. Camera-sector removal
 
-Partition registered camera centers into eight azimuthal sectors around their centroid. Remove one sector at a time, then adjacent pairs. Record sector definition and every removed image ID in the manifest.
+Partition registered camera centers into eight azimuthal sectors in the trajectory's best-fit PCA plane. Remove one sector at a time, then adjacent pairs, while retaining a fixed image budget sampled over the remaining trajectory. Record the PCA basis, sector definition, and every removed source filename in the manifest.
 
 ## Required outputs per condition
 
@@ -48,7 +48,8 @@ Partition registered camera centers into eight azimuthal sectors around their ce
 - Materialized derived image directory, if the reconstruction tool cannot consume a manifest directly
 - Exact reconstruction recipe and stage status
 - ReconCheck Quality Report
-- Comparison to the full baseline
+- Comparison to the controlled full-capture baseline
+- Baseline-referenced dense completeness report
 - Human-readable conclusion and limitations
 
 ## Primary endpoints
@@ -61,7 +62,15 @@ Partition registered camera centers into eight azimuthal sectors around their ce
 - Trajectory-sector coverage ratio
 - Sparse point count
 - Dense-cloud and mesh availability
+- Reference-surface recall against the aligned controlled dense cloud
+- Missing reference-surface fraction and largest connected missing region
 
-## Decision rule
+## Frozen complete-object decision rule (v1)
 
-The provisional minimum viable budget is the smallest budget that passes the quality profile across all required repetitions and does not conceal a localized coverage failure. It is a scene- and protocol-specific result, not a universal threshold.
+Internal ReconCheck status is reported separately from complete-object suitability. For the controlled Barn reference, dense-reference completeness uses a similarity alignment from shared registered camera centers and a nearest-point tolerance of 0.5% of the reference dense-cloud bounding-box diagonal.
+
+- **good / complete:** at least 97% reference-surface recall and largest connected missing region under 2% of the reference sample.
+- **warning / partially complete:** at least 95% recall and largest connected missing region under 2%.
+- **poor / incomplete:** every other result, including a connected missing region of 2% or more.
+
+These thresholds were calibrated after the initial completed conditions and are frozen before the remaining conditions. They are exploratory for this study, scene- and protocol-specific, and not universal photogrammetry thresholds.
