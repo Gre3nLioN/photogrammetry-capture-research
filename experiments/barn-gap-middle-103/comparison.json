@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "experiment_id": "barn-gap-middle-103",
+  "baseline_fingerprint_sha256": "6bacdd999987f641668d9195bdddb1364cdedd5e5013be5fd798b838996c3611",
+  "experiment_fingerprint_sha256": "b5e40218953005a8967dc88f2ecba917636112992e60089b6a82ba541b07628d",
+  "quality_transition": {
+    "baseline": "good",
+    "experiment": "good",
+    "checks": [
+      {
+        "metric": "registration_ratio",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "reprojection_p95_px",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "median_track_length",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "median_view_angle_deg",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "coverage_sector_ratio",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "dense_output",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      },
+      {
+        "metric": "mesh_output",
+        "baseline": true,
+        "experiment": true,
+        "changed": false
+      }
+    ]
+  },
+  "reference_completeness": {
+    "method": "dense-reference-recall-v1",
+    "reference_experiment": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-full-controlled",
+    "shared_camera_count": 103,
+    "similarity_alignment": {
+      "scale": 0.9992477606952421,
+      "camera_center_rmse": 0.004875007949182005
+    },
+    "reference_point_sample_count": 249473,
+    "experiment_point_sample_count": 589420,
+    "scene_diagonal": 38.32943271297957,
+    "distance_tolerance": 0.19164716356489783,
+    "reference_surface_recall": 0.9807875000501056,
+    "missing_reference_surface_fraction": 0.01921249994989438,
+    "largest_missing_component": {
+      "reference_point_count": 1622,
+      "voxel_count": 259,
+      "bounding_box_diagonal": 10.60832402251978,
+      "reference_surface_fraction": 0.006501705595395093
+    },
+    "status": "complete",
+    "scope": "Dense-cloud recall against the controlled full-capture reference; it estimates completeness, not absolute geometric accuracy."
+  },
+  "task_verdict": "good",
+  "metrics": [
+    {
+      "name": "registration_ratio",
+      "baseline": 1.0,
+      "experiment": 1.0,
+      "absolute_delta": 0.0,
+      "relative_delta": 0.0
+    },
+    {
+      "name": "reprojection_p95_px",
+      "baseline": 1.6206568359270197,
+      "experiment": 1.5248116864164192,
+      "absolute_delta": -0.09584514951060052,
+      "relative_delta": -0.05913969409555902
+    },
+    {
+      "name": "median_track_length",
+      "baseline": 4.0,
+      "experiment": 4.0,
+      "absolute_delta": 0.0,
+      "relative_delta": 0.0
+    },
+    {
+      "name": "median_view_angle_deg",
+      "baseline": 8.969282426468446,
+      "experiment": 13.19565928530599,
+      "absolute_delta": 4.226376858837543,
+      "relative_delta": 0.4712056837864154
+    },
+    {
+      "name": "coverage_sector_ratio",
+      "baseline": 1.0,
+      "experiment": 1.0,
+      "absolute_delta": 0.0,
+      "relative_delta": 0.0
+    },
+    {
+      "name": "sparse_point_count",
+      "baseline": 206930,
+      "experiment": 32482,
+      "absolute_delta": -174448,
+      "relative_delta": -0.8430290436379452
+    }
+  ],
+  "execution": {
+    "status": "complete",
+    "total_stage_duration_seconds": 8311.645,
+    "derived_storage_bytes": 3061074228,
+    "stages": {
+      "feature-extractor": {
+        "exit_code": 0,
+        "duration_seconds": 16.802
+      },
+      "exhaustive-matcher": {
+        "exit_code": 0,
+        "duration_seconds": 4688.854
+      },
+      "mapper": {
+        "exit_code": 0,
+        "duration_seconds": 474.533
+      },
+      "image-undistorter": {
+        "exit_code": 0,
+        "duration_seconds": 66.017
+      },
+      "patch-match-stereo": {
+        "exit_code": 0,
+        "duration_seconds": 2205.738
+      },
+      "stereo-fusion": {
+        "exit_code": 0,
+        "duration_seconds": 698.814
+      },
+      "poisson-mesher": {
+        "exit_code": 0,
+        "duration_seconds": 160.887
+      }
+    }
+  },
+  "conclusion": "Internal consistency retained the good verdict. Complete-object task verdict: good (complete reference completeness).",
+  "limitations": [
+    "Internal reconstruction consistency is not absolute geometric accuracy.",
+    "This condition must be interpreted with its recorded reconstruction recipe and repetitions."
+  ]
+}
