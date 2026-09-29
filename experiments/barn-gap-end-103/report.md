@@ -1,4 +1,4 @@
-# barn-sector-3-103
+# barn-gap-end-103
 
 ## Quality transition
 
@@ -11,11 +11,11 @@
 - Status: **complete**
 - Complete-object task verdict: **warning**
 - Detail fidelity: **degraded**
-- Reference-surface recall: 97.8%
-- Fine cell-occupancy recall: 70.3%
-- Missing reference surface: 2.2%
+- Reference-surface recall: 98.7%
+- Fine cell-occupancy recall: 68.6%
+- Missing reference surface: 1.3%
 - Distance tolerance: 0.1916
-- Largest connected missing region: 0.8% of reference surface, spanning 6.01
+- Largest connected missing region: 0.4% of reference surface, spanning 10.38
 
 ## Conclusion
 
@@ -24,8 +24,8 @@ Internal consistency retained the good verdict. Complete-object task verdict: wa
 ## Execution
 
 - Status: `complete`
-- Total stage duration: 8483.3 seconds
-- Derived storage: 3,061,755,819 bytes
+- Total stage duration: 8077.4 seconds
+- Derived storage: 3,048,206,629 bytes
 
 ## Limitations
 

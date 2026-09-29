@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "experiment_id": "barn-gap-middle-103",
+  "experiment_id": "barn-gap-end-103",
   "baseline_fingerprint_sha256": "6bacdd999987f641668d9195bdddb1364cdedd5e5013be5fd798b838996c3611",
-  "experiment_fingerprint_sha256": "b5e40218953005a8967dc88f2ecba917636112992e60089b6a82ba541b07628d",
+  "experiment_fingerprint_sha256": "415edaac96730d0c0350307a0727a73974e45bc85aa846ab9452bbd9738b35bb",
   "quality_transition": {
     "baseline": "good",
     "experiment": "good",
@@ -56,20 +56,20 @@
     "reference_experiment": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-capture-research/experiments/barn-full-controlled",
     "shared_camera_count": 103,
     "similarity_alignment": {
-      "scale": 0.9992477606952421,
-      "camera_center_rmse": 0.004875007949182005
+      "scale": 0.9924583204006893,
+      "camera_center_rmse": 0.007479365530213122
     },
     "reference_point_sample_count": 249473,
-    "experiment_point_sample_count": 589420,
+    "experiment_point_sample_count": 546755,
     "scene_diagonal": 38.32943271297957,
     "distance_tolerance": 0.19164716356489783,
-    "reference_surface_recall": 0.9807875000501056,
-    "missing_reference_surface_fraction": 0.01921249994989438,
+    "reference_surface_recall": 0.986764098720102,
+    "missing_reference_surface_fraction": 0.013235901279898044,
     "largest_missing_component": {
-      "reference_point_count": 1622,
-      "voxel_count": 259,
-      "bounding_box_diagonal": 10.60832402251978,
-      "reference_surface_fraction": 0.006501705595395093
+      "reference_point_count": 1064,
+      "voxel_count": 182,
+      "bounding_box_diagonal": 10.377300164630688,
+      "reference_surface_fraction": 0.00426499060018519
     },
     "status": "complete",
     "detail_fidelity": {
@@ -80,9 +80,9 @@
         "coarse": 0.38329432712979566
       },
       "occupancy_recall": {
-        "fine": 0.6935979356107151,
-        "reference": 0.6534213168842348,
-        "coarse": 0.6705927051671732
+        "fine": 0.6856107151634309,
+        "reference": 0.6809639936881365,
+        "coarse": 0.7150455927051672
       },
       "sampling_ceiling": {
         "fine": 0.8830774239053768,
@@ -106,9 +106,9 @@
     {
       "name": "reprojection_p95_px",
       "baseline": 1.6206568359270197,
-      "experiment": 1.5248116864164192,
-      "absolute_delta": -0.09584514951060052,
-      "relative_delta": -0.05913969409555902
+      "experiment": 1.5913995394928808,
+      "absolute_delta": -0.02925729643413888,
+      "relative_delta": -0.01805273996663435
     },
     {
       "name": "median_track_length",
@@ -120,9 +120,9 @@
     {
       "name": "median_view_angle_deg",
       "baseline": 8.969282426468446,
-      "experiment": 13.19565928530599,
-      "absolute_delta": 4.226376858837543,
-      "relative_delta": 0.4712056837864154
+      "experiment": 13.427084035980656,
+      "absolute_delta": 4.4578016095122095,
+      "relative_delta": 0.4970076085860771
     },
     {
       "name": "coverage_sector_ratio",
@@ -134,43 +134,43 @@
     {
       "name": "sparse_point_count",
       "baseline": 206930,
-      "experiment": 32482,
-      "absolute_delta": -174448,
-      "relative_delta": -0.8430290436379452
+      "experiment": 31830,
+      "absolute_delta": -175100,
+      "relative_delta": -0.8461798675880733
     }
   ],
   "execution": {
     "status": "complete",
-    "total_stage_duration_seconds": 8311.645,
-    "derived_storage_bytes": 3061202157,
+    "total_stage_duration_seconds": 8077.403000000001,
+    "derived_storage_bytes": 3048206629,
     "stages": {
       "feature-extractor": {
         "exit_code": 0,
-        "duration_seconds": 16.802
+        "duration_seconds": 17.452
       },
       "exhaustive-matcher": {
         "exit_code": 0,
-        "duration_seconds": 4688.854
+        "duration_seconds": 4404.085
       },
       "mapper": {
         "exit_code": 0,
-        "duration_seconds": 474.533
+        "duration_seconds": 446.737
       },
       "image-undistorter": {
         "exit_code": 0,
-        "duration_seconds": 66.017
+        "duration_seconds": 64.519
       },
       "patch-match-stereo": {
         "exit_code": 0,
-        "duration_seconds": 2205.738
+        "duration_seconds": 2267.835
       },
       "stereo-fusion": {
         "exit_code": 0,
-        "duration_seconds": 698.814
+        "duration_seconds": 726.341
       },
       "poisson-mesher": {
         "exit_code": 0,
-        "duration_seconds": 160.887
+        "duration_seconds": 150.434
       }
     }
   },

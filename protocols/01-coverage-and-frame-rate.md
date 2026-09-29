@@ -73,4 +73,12 @@ Internal ReconCheck status is reported separately from complete-object suitabili
 - **warning / partially complete:** at least 95% recall and largest connected missing region under 2%.
 - **poor / incomplete:** every other result, including a connected missing region of 2% or more.
 
-These thresholds were calibrated after the initial completed conditions and are frozen before the remaining conditions. They are exploratory for this study, scene- and protocol-specific, and not universal photogrammetry thresholds.
+## Frozen detail-fidelity rule (v1)
+
+Detail fidelity uses deterministic multi-scale voxel occupancy against the aligned controlled dense cloud. The fine scale is 0.25% of the reference bounding-box diagonal; reference and coarse scales are also recorded.
+
+- **preserved:** normalized fine cell-occupancy recall at least 80%.
+- **degraded:** normalized fine cell-occupancy recall from 60% to below 80%.
+- **poor:** normalized fine cell-occupancy recall below 60%.
+
+The overall task verdict is `poor` when completeness or detail fidelity is poor, `warning` when either is partially complete/degraded, and `good` only when both are good/preserved. These thresholds were calibrated before the video-cadence conditions and are exploratory, scene- and protocol-specific, and not universal photogrammetry thresholds.

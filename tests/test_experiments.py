@@ -3,7 +3,10 @@ from pathlib import Path
 
 import pytest
 
-from photogrammetry_capture_research.completeness import classify_completeness
+from photogrammetry_capture_research.completeness import (
+    classify_completeness,
+    classify_detail_fidelity,
+)
 from photogrammetry_capture_research.experiments import (
     ExperimentError,
     compare_experiment,
@@ -86,6 +89,9 @@ def test_completeness_classification_is_conservative() -> None:
     assert classify_completeness(0.97, 0.019) == "complete"
     assert classify_completeness(0.96, 0.019) == "partially_complete"
     assert classify_completeness(0.98, 0.02) == "incomplete"
+    assert classify_detail_fidelity(0.80) == "preserved"
+    assert classify_detail_fidelity(0.60) == "degraded"
+    assert classify_detail_fidelity(0.599) == "poor"
 
 
 def test_uneven_cadence_keeps_requested_budget() -> None:

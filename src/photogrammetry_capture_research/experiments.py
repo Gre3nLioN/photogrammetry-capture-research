@@ -346,13 +346,14 @@ def compare_experiment(
         completeness = evaluate_dense_completeness(reference_experiment, experiment_dir)
     internal_verdict = str(experiment["verdict"]["status"])
     completeness_status = completeness["status"]
+    detail_status = completeness.get("detail_fidelity", {}).get("status", "unverified")
     task_verdict = (
         "poor"
-        if completeness_status == "incomplete"
+        if completeness_status == "incomplete" or detail_status == "poor"
         else "warning"
-        if completeness_status == "partially_complete"
+        if completeness_status == "partially_complete" or detail_status == "degraded"
         else internal_verdict
-        if completeness_status == "complete"
+        if completeness_status == "complete" and detail_status == "preserved"
         else "unverified"
     )
     internal_conclusion = (
@@ -363,7 +364,7 @@ def compare_experiment(
     )
     conclusion = (
         f"{internal_conclusion} Complete-object task verdict: {task_verdict} "
-        f"({completeness_status} reference completeness)."
+        f"({completeness_status} reference completeness; {detail_status} detail fidelity)."
     )
     return {
         "schema_version": 1,
@@ -413,6 +414,7 @@ def write_comparison(
         item["metric"] for item in comparison["quality_transition"]["checks"] if item["changed"]
     ]
     completeness = comparison["reference_completeness"]
+    detail_fidelity = completeness.get("detail_fidelity", {})
     largest_missing = completeness.get("largest_missing_component", {})
     report = "\n".join(
         [
@@ -428,9 +430,12 @@ def write_comparison(
             "",
             f"- Status: **{completeness['status']}**",
             f"- Complete-object task verdict: **{comparison['task_verdict']}**",
+            f"- Detail fidelity: **{detail_fidelity.get('status', 'unverified')}**",
             *(
                 [
                     f"- Reference-surface recall: {completeness['reference_surface_recall']:.1%}",
+                    "- Fine cell-occupancy recall: "
+                    f"{completeness['detail_fidelity']['occupancy_recall']['fine']:.1%}",
                     "- Missing reference surface: "
                     f"{completeness['missing_reference_surface_fraction']:.1%}",
                     f"- Distance tolerance: {completeness['distance_tolerance']:.4f}",

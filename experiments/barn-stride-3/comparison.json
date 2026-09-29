@@ -72,6 +72,26 @@
       "reference_surface_fraction": 0.0010902983489195224
     },
     "status": "complete",
+    "detail_fidelity": {
+      "method": "multi-scale-baseline-voxel-occupancy-v1",
+      "cell_sizes": {
+        "fine": 0.09582358178244892,
+        "reference": 0.19164716356489783,
+        "coarse": 0.38329432712979566
+      },
+      "occupancy_recall": {
+        "fine": 0.8089825509953306,
+        "reference": 0.8043322335389471,
+        "coarse": 0.8195288753799391
+      },
+      "sampling_ceiling": {
+        "fine": 0.8830774239053768,
+        "reference": 0.9300867244829887,
+        "coarse": 0.9560479476934254
+      },
+      "status": "preserved",
+      "scope": "Spatial cell occupancy estimates retained detail distribution; it is not a true geometric error metric."
+    },
     "scope": "Dense-cloud recall against the controlled full-capture reference; it estimates completeness, not absolute geometric accuracy."
   },
   "task_verdict": "good",
@@ -122,7 +142,7 @@
   "execution": {
     "status": "complete",
     "total_stage_duration_seconds": 13363.387,
-    "derived_storage_bytes": 4056452005,
+    "derived_storage_bytes": 4056453115,
     "stages": {
       "feature-extractor": {
         "exit_code": 0,
@@ -154,7 +174,7 @@
       }
     }
   },
-  "conclusion": "Internal consistency retained the good verdict. Complete-object task verdict: good (complete reference completeness).",
+  "conclusion": "Internal consistency retained the good verdict. Complete-object task verdict: good (complete reference completeness; preserved detail fidelity).",
   "limitations": [
     "Internal reconstruction consistency is not absolute geometric accuracy.",
     "This condition must be interpreted with its recorded reconstruction recipe and repetitions."

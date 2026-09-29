@@ -146,6 +146,27 @@ def largest_missing_component(points: np.ndarray, cell_size: float) -> dict[str,
     }
 
 
+def voxel_occupancy_recall(
+    reference_points: np.ndarray, experiment_points: np.ndarray, cell_size: float
+) -> float:
+    reference_cells = np.unique(np.floor(reference_points / cell_size).astype(np.int64), axis=0)
+    experiment_cells = {
+        tuple(cell)
+        for cell in np.unique(np.floor(experiment_points / cell_size).astype(np.int64), axis=0)
+    }
+    return float(
+        sum(tuple(cell) in experiment_cells for cell in reference_cells) / len(reference_cells)
+    )
+
+
+def classify_detail_fidelity(fine_occupancy_recall: float) -> str:
+    if fine_occupancy_recall >= 0.80:
+        return "preserved"
+    if fine_occupancy_recall >= 0.60:
+        return "degraded"
+    return "poor"
+
+
 def classify_completeness(recall: float, largest_component_fraction: float) -> str:
     if recall >= 0.97 and largest_component_fraction < 0.02:
         return "complete"
@@ -173,6 +194,7 @@ def evaluate_dense_completeness(reference_experiment: Path, experiment: Path) ->
     aligned_centers = alignment.transform(source)
     alignment_rmse = float(np.sqrt(np.mean(np.sum((aligned_centers - target) ** 2, axis=1))))
     reference_points = _ply_vertex_positions(reference_dense, _MAX_REFERENCE_POINTS)
+    reference_cloud = _ply_vertex_positions(reference_dense, _MAX_EXPERIMENT_POINTS)
     experiment_points = alignment.transform(
         _ply_vertex_positions(experiment_dense, _MAX_EXPERIMENT_POINTS)
     )
@@ -183,6 +205,23 @@ def evaluate_dense_completeness(reference_experiment: Path, experiment: Path) ->
     largest_component = largest_missing_component(missing_points, tolerance * 2)
     recall = float(np.mean(distances <= tolerance))
     largest_component_fraction = largest_component["reference_point_count"] / len(reference_points)
+    occupancy_scales = {
+        "fine": diagonal * 0.0025,
+        "reference": diagonal * 0.005,
+        "coarse": diagonal * 0.01,
+    }
+    occupancy_ceiling = {
+        name: voxel_occupancy_recall(reference_points, reference_cloud, cell_size)
+        for name, cell_size in occupancy_scales.items()
+    }
+    occupancy_recall = {
+        name: min(
+            1.0,
+            voxel_occupancy_recall(reference_points, experiment_points, cell_size)
+            / occupancy_ceiling[name],
+        )
+        for name, cell_size in occupancy_scales.items()
+    }
     return {
         "method": "dense-reference-recall-v1",
         "reference_experiment": str(reference_experiment.resolve()),
@@ -202,6 +241,17 @@ def evaluate_dense_completeness(reference_experiment: Path, experiment: Path) ->
             "reference_surface_fraction": largest_component_fraction,
         },
         "status": classify_completeness(recall, largest_component_fraction),
+        "detail_fidelity": {
+            "method": "multi-scale-baseline-voxel-occupancy-v1",
+            "cell_sizes": occupancy_scales,
+            "occupancy_recall": occupancy_recall,
+            "sampling_ceiling": occupancy_ceiling,
+            "status": classify_detail_fidelity(occupancy_recall["fine"]),
+            "scope": (
+                "Spatial cell occupancy estimates retained detail distribution; it is not a "
+                "true geometric error metric."
+            ),
+        },
         "scope": (
             "Dense-cloud recall against the controlled full-capture reference; it estimates "
             "completeness, not absolute geometric accuracy."

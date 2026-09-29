@@ -10,20 +10,22 @@
 
 - Status: **complete**
 - Complete-object task verdict: **good**
+- Detail fidelity: **preserved**
 - Reference-surface recall: 99.5%
+- Fine cell-occupancy recall: 80.9%
 - Missing reference surface: 0.5%
 - Distance tolerance: 0.1916
 - Largest connected missing region: 0.1% of reference surface, spanning 7.44
 
 ## Conclusion
 
-Internal consistency retained the good verdict. Complete-object task verdict: good (complete reference completeness).
+Internal consistency retained the good verdict. Complete-object task verdict: good (complete reference completeness; preserved detail fidelity).
 
 ## Execution
 
 - Status: `complete`
 - Total stage duration: 13363.4 seconds
-- Derived storage: 4,056,452,005 bytes
+- Derived storage: 4,056,453,115 bytes
 
 ## Limitations
 
