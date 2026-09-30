@@ -1,6 +1,10 @@
 # Academic paper track
 
-Working title: **Minimum Viable Capture Budgets for Low-Cost Photogrammetry: A Controlled Study of Coverage, Image Count, and Image Quality**
+Working title: **Minimum Viable Capture Budgets for Low-Cost Photogrammetry: An Exploratory Study of Coverage, Image Count, and Capture Cadence**
+
+Current draft: [`manuscript.md`](manuscript.md)
+
+Status: Barn exploratory study drafted; formal related-work review, bibliography, figures, and external-scene validation remain pending.
 
 ## Planned sections
 
