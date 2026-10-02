@@ -68,6 +68,22 @@ The existing dense artifacts are structurally readable binary PLY files:
 
 This confirms output availability only. No absolute accuracy, completeness, or detail-fidelity claim is made because this pass did not construct a matched reduced baseline or independent reference geometry.
 
+### Stride-2 reconstruction result
+
+The 88-image reconstruction completed successfully in 1 h 20 min after the output-directory fix. Stage timings were approximately 1 min feature extraction, 3 min matching, 6 min mapping, 6 min undistortion, 44 min PatchMatch, 19 min fusion, and 4 min meshing.
+
+| Metric | Full 176-image baseline | 88-image stride-2 subset | Frozen threshold |
+|---|---:|---:|---:|
+| Registered images | 176/176 (100.0%) | 87/88 (98.9%) | ≥95% |
+| Reprojection P95 | 2.269 px | 2.266 px | ≤2.0 px |
+| Median track length | 3.0 views | 3.0 views | ≥4 views |
+| Median view angle | 12.93° | 19.95° | ≥8° |
+| Camera-sector coverage | 1.000 | 1.000 | ≥0.75 |
+| Dense cloud vertices | 4,234,473 | 1,561,804 | required |
+| Mesh vertices / faces | 9,901,128 / 19,558,404 | 3,384,743 / 6,735,708 | required |
+
+The reduced subset remains `warning`, with nearly unchanged reprojection and track metrics, slightly higher median view angle, and one unregistered image. This is a useful external stress test of the internal metrics, but not yet a completeness/detail-fidelity validation.
+
 ## Interpretation
 
 This lightweight external check supports retaining the separation between internal consistency and object/detail evaluation. A reconstruction can register every image and cover all camera sectors while still failing stricter track and residual thresholds. It is evidence that the frozen profile detects meaningful variation outside the Barn study, not evidence that the thresholds generalize universally.
