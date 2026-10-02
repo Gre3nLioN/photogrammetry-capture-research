@@ -82,7 +82,25 @@ The 88-image reconstruction completed successfully in 1 h 20 min after the outpu
 | Dense cloud vertices | 4,234,473 | 1,561,804 | required |
 | Mesh vertices / faces | 9,901,128 / 19,558,404 | 3,384,743 / 6,735,708 | required |
 
-The reduced subset remains `warning`, with nearly unchanged reprojection and track metrics, slightly higher median view angle, and one unregistered image. This is a useful external stress test of the internal metrics, but not yet a completeness/detail-fidelity validation.
+The reduced subset remains `warning`, with nearly unchanged reprojection and track metrics, slightly higher median view angle, and one unregistered image.
+
+### Baseline-aligned completeness and detail fidelity
+
+The frozen dense-reference evaluator aligned the subset to the full reconstruction using 87 shared camera centers. Alignment RMSE was 0.0486 scene units.
+
+| Metric | Result | Frozen interpretation |
+|---|---:|---|
+| Reference-surface recall | 70.64% | Incomplete |
+| Largest missing-region fraction | 29.29% | Incomplete |
+| Normalized fine occupancy | 3.62% | Poor detail fidelity |
+| Normalized reference-scale occupancy | See JSON artifact | — |
+| Normalized coarse occupancy | See JSON artifact | — |
+
+The result is a strong external stress test: the reduced Helenenschacht capture retained acceptable registration and view-angle statistics but lost substantial reference geometry and fine occupancy. This supports keeping internal consistency separate from completeness and detail fidelity. It also demonstrates that the frozen thresholds produce a decisive failure on a second scene without retuning.
+
+This is still scene- and pipeline-specific evidence. Helenenschacht is an aerial dataset, and the full reconstruction is used as a practical reference rather than absolute ground truth.
+
+Raw comparison artifact: `reports/helenenschacht-stride-2-completeness.json`.
 
 ## Interpretation
 

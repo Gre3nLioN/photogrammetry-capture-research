@@ -1,0 +1,43 @@
+{
+  "method": "dense-reference-recall-v1",
+  "reference_experiment": "/home/gre3nlion/Projects/llm-wiki/wiki/projects/photogrammetry-quality-auditor/runs/helenenschacht-colmap-v1",
+  "shared_camera_count": 87,
+  "similarity_alignment": {
+    "scale": 1.0015521285639877,
+    "camera_center_rmse": 0.04859338108399948
+  },
+  "reference_point_sample_count": 249087,
+  "experiment_point_sample_count": 780902,
+  "scene_diagonal": 21.66780833602696,
+  "distance_tolerance": 0.1083390416801348,
+  "reference_surface_recall": 0.7063877279825924,
+  "missing_reference_surface_fraction": 0.2936122720174076,
+  "largest_missing_component": {
+    "reference_point_count": 72954,
+    "voxel_count": 6400,
+    "bounding_box_diagonal": 21.502502424877903,
+    "reference_surface_fraction": 0.29288561827795107
+  },
+  "status": "incomplete",
+  "detail_fidelity": {
+    "method": "multi-scale-baseline-voxel-occupancy-v1",
+    "cell_sizes": {
+      "fine": 0.0541695208400674,
+      "reference": 0.1083390416801348,
+      "coarse": 0.2166780833602696
+    },
+    "occupancy_recall": {
+      "fine": 0.03619354730353874,
+      "reference": 0.19384601993297645,
+      "coarse": 0.3761194029850747
+    },
+    "sampling_ceiling": {
+      "fine": 0.9277189155500156,
+      "reference": 0.9592134925273441,
+      "coarse": 0.9770479330459041
+    },
+    "status": "poor",
+    "scope": "Spatial cell occupancy estimates retained detail distribution; it is not a true geometric error metric."
+  },
+  "scope": "Dense-cloud recall against the controlled full-capture reference; it estimates completeness, not absolute geometric accuracy."
+}
