@@ -1,10 +1,10 @@
 # Minimum Viable Capture Budgets for Low-Cost Photogrammetry: An Exploratory Study of Coverage, Image Count, and Capture Cadence
 
-**Draft status:** Barn exploratory study complete; external-scene validation and bibliography pending.
+**Draft status:** Barn exploratory study and lightweight Helenenschacht external validation complete; bibliography, figures, and editorial revision pending.
 
 ## Abstract
 
-Low-cost photogrammetry guidance often emphasizes image count, but the spatial distribution and redundancy of those images may be equally important. We conducted a controlled exploratory study using the 410-image Tanks and Temples Barn sequence to evaluate uniform temporal reduction, missing angular coverage, contiguous route gaps, and uneven video-like capture cadence. Sixteen reconstructions—including a controlled full-capture reference and 15 reduced-capture conditions—were produced with one fixed CUDA-enabled COLMAP pipeline. Evaluation separated three concepts: internal reconstruction consistency, complete-object coverage against the aligned full-capture dense cloud, and retained spatial detail measured through normalized multi-scale voxel occupancy. Uniformly retaining one-third of the sequence preserved both object completeness and detail under the declared thresholds. Retaining one-quarter preserved the object but degraded detail. At the same 103-image budget, outcomes ranged from warning-level degradation to severe incompleteness depending on viewpoint distribution. The most extreme uneven-cadence condition retained only 29.4% of the reference surface and 3.6% normalized fine occupancy despite receiving a `good` internal-consistency verdict. These results show that nominal image count and successful reconstruction are insufficient indicators of practical output quality. For this scene, distinct and well-distributed viewpoints mattered more than redundant frames. The findings are scene- and pipeline-specific and require replication on additional scenes and actual phone video.
+Low-cost photogrammetry guidance often emphasizes image count, but the spatial distribution and redundancy of those images may be equally important. We conducted a controlled exploratory study using the 410-image Tanks and Temples Barn sequence to evaluate uniform temporal reduction, missing angular coverage, contiguous route gaps, and uneven video-like capture cadence. Sixteen reconstructions—including a controlled full-capture reference and 15 reduced-capture conditions—were produced with one fixed CUDA-enabled COLMAP pipeline. Evaluation separated three concepts: internal reconstruction consistency, complete-object coverage against the aligned full-capture dense cloud, and retained spatial detail measured through normalized multi-scale voxel occupancy. Uniformly retaining one-third of the sequence preserved both object completeness and detail under the declared thresholds. Retaining one-quarter preserved the object but degraded detail. At the same 103-image budget, outcomes ranged from warning-level degradation to severe incompleteness depending on viewpoint distribution. The most extreme uneven-cadence condition retained only 29.4% of the reference surface and 3.6% normalized fine occupancy despite receiving a `good` internal-consistency verdict. These results show that nominal image count and successful reconstruction are insufficient indicators of practical output quality. For this scene, distinct and well-distributed viewpoints mattered more than redundant frames. A lightweight external validation on the independent Helenenschacht aerial dataset reproduced the same separation: an 88-image stride-2 subset retained 98.9% registration and full sector coverage, but achieved only 70.6% reference-surface recall and 3.6% normalized fine occupancy. The findings are scene- and pipeline-specific and do not establish universal thresholds or replace validation on actual phone video.
 
 ## 1. Introduction
 
@@ -121,7 +121,7 @@ The exploratory bands were:
 
 The task verdict was `good` only when completeness was complete and detail was preserved. A partially complete or detail-degraded result was `warning`; incomplete geometry or poor detail was `poor`.
 
-These rules were calibrated during the exploratory study and frozen before the uneven-cadence conditions. They require independent validation.
+These rules were calibrated during the exploratory study and frozen before the uneven-cadence conditions. A lightweight external check on Helenenschacht applied them without retuning.
 
 ## 5. Results
 
@@ -168,6 +168,12 @@ Uneven cadence produced the largest variation at a constant 103-image budget. Co
 
 All three conditions completed the full COLMAP pipeline, and all received an internal `good` verdict. This is the study's strongest evidence that nominal image count and internal reconstruction health do not establish complete-object usefulness.
 
+### 5.6 Lightweight external validation
+
+To test whether the frozen evaluation rules were specific only to Barn, we processed an independent 176-image aerial Helenenschacht dataset with the same broad COLMAP and ReconCheck workflow. A deterministic stride-2 subset used 88 symlinked images; the full 176-image reconstruction served as a practical reference. The subset registered 87/88 images, achieved full camera-sector coverage, and had a median view angle of 19.95°. Its internal status was nevertheless `warning` because P95 reprojection error was 2.266 px and median track length was 3 views.
+
+After similarity alignment using 87 shared camera centers, reference-surface recall was 70.64%, the largest missing-region fraction was 29.29%, and normalized fine occupancy was 3.62%. The evaluator therefore classified the subset as incomplete with poor detail fidelity. This result is consistent with the Barn study's central distinction between internal consistency and recovered object/detail content, while remaining scene- and pipeline-specific.
+
 ## 6. Discussion
 
 ### 6.1 Viewpoint distribution dominates nominal count
@@ -182,11 +188,17 @@ Several route-gap and sector conditions reconstructed the overall Barn while los
 
 Except for stride 5, all reduced conditions retained an internal ReconCheck `good` verdict. Yet four task conditions were incomplete and received a poor task verdict under baseline-relative evaluation. Reprojection and track statistics describe consistency among selected images; they cannot reveal geometry that was never observed.
 
-### 6.4 Practical implication
+### 6.4 External validation and scope
+
+The Helenenschacht check provides limited cross-scene support for the evaluation design: the frozen rules identified a reconstruction with acceptable registration and coverage but substantial missing geometry and detail. It does not validate universal thresholds. Helenenschacht is an aerial dataset with different scene geometry, camera motion, and image characteristics from the Barn sequence, so the result is best treated as a transfer test rather than a phone-capture result.
+
+### 6.5 Practical implication
 
 For this scene, a distributed one-third sample was a stronger capture than several 103-image alternatives. The result supports guidance to prioritize complete loops, corners, roof lines, and distinct viewpoints, while avoiding long bursts of nearly redundant frames.
 
 ## 7. Reproducibility
+
+The external validation is recorded in `reports/external-validation-helenenschacht-lite.md` and `reports/helenenschacht-stride-2-completeness.json`. The derived run contains the deterministic stride-2 manifest, symlinked image subset, exact pipeline script, stage logs, sparse model, dense cloud, and mesh.
 
 Every experiment directory contains:
 
@@ -200,9 +212,9 @@ The research repository contains deterministic selection code, schemas, tests, a
 
 ## 8. Threats to Validity
 
-### 8.1 Single scene
+### 8.1 Scene and capture mismatch
 
-All reported results use one Barn sequence. Geometry, texture, lighting, trajectory, and visibility redundancy may not generalize to small objects, interiors, vegetation, reflective materials, urban scenes, or other buildings.
+The controlled study uses one Barn sequence, while the external check uses one aerial Helenenschacht dataset. This is evidence beyond Barn, but the scenes differ in geometry, trajectory, camera motion, and image characteristics. Neither supports universal thresholds across objects, interiors, vegetation, reflective materials, urban scenes, or handheld phone video.
 
 ### 8.2 Reference rather than ground truth
 
@@ -214,7 +226,7 @@ Uneven-cadence conditions select ordered still images. They do not model phone-v
 
 ### 8.4 Exploratory threshold calibration
 
-Completeness and detail thresholds were calibrated after inspecting initial conditions and visual outputs, then frozen before the final cadence tests. This reduces their confirmatory strength and creates a risk of overfitting to Barn. A second scene must treat these thresholds as preregistered.
+Completeness and detail thresholds were calibrated after inspecting initial conditions and visual outputs, then frozen before the final cadence tests and Helenenschacht check. This reduces their confirmatory strength and creates a risk of overfitting to the tested scenes. A larger preregistered multi-scene study is still required.
 
 ### 8.5 No stochastic repetitions
 
@@ -242,7 +254,7 @@ The exploratory evidence supports the following scene-specific guidance:
 
 A low image budget can produce a useful reconstruction when viewpoints remain distinct and evenly distributed. In the Barn study, a uniform one-third sample preserved both object completeness and the declared level of detail, while a one-quarter sample preserved the object but degraded detail. At the same 103-image budget, uneven sampling and missing angular coverage produced outcomes ranging from warning-level degradation to severe incompleteness. The practical minimum was therefore governed by viewpoint distribution as much as by image count.
 
-The next research step is external validation on a second scene using the same frozen evaluation rules, followed by experiments with actual phone video.
+The frozen evaluation rules transferred to one lightweight external scene check, but broader validation remains necessary. The next steps are verified literature review, figures, and controlled experiments with actual phone video across multiple scenes.
 
 ## Data and Artifact Availability
 
