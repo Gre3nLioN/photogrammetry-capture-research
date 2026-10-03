@@ -146,6 +146,10 @@ These rules were calibrated during the exploratory study and frozen before the u
 | Burst in middle | 103 | good | warning | partial | degraded | 96.8% | 66.2% |
 | Burst at end | 103 | good | poor | incomplete | degraded | 94.7% | 62.4% |
 
+![Baseline-relative surface recall and normalized fine detail](figures/coverage-detail-summary.svg)
+
+**Figure 1.** Baseline-relative surface recall and normalized fine occupancy for uniform Barn reductions and the Helenenschacht external check. The dashed lines show the frozen completeness and detail thresholds. The Helenenschacht result demonstrates that acceptable registration and coverage can coexist with substantial geometry and detail loss.
+
 ### 5.2 Uniform temporal reduction
 
 Uniform reduction produced the clearest budget trend. Retaining every third frame preserved 99.5% reference-surface recall and 80.9% normalized fine occupancy, meeting the exploratory `good` rule. Every fourth frame preserved the object at 98.4% recall but reduced fine occupancy to 69.9%, producing a warning for degraded detail. Every fifth frame reduced recall to 96.9% and fine occupancy to 68.1%; its internal verdict also dropped to warning because median track length fell from four to three.
