@@ -4,7 +4,11 @@ Working title: **Minimum Viable Capture Budgets for Low-Cost Photogrammetry: An 
 
 Current draft: [`manuscript.md`](manuscript.md)
 
-Status: Barn exploratory study drafted; formal related-work review, bibliography, figures, and external-scene validation remain pending.
+Status: Barn study and Helenenschacht external check drafted; initial literature map and bibliography added. Full-text review, subset/keyframe coverage, figure validation, and editorial revision remain pending.
+
+- [Literature evidence map](literature-review.md) — sources, verification scope, and outstanding tasks.
+- [BibTeX bibliography](references.bib) — six initial citation records.
+- [Summary figure](figures/coverage-detail-summary.svg) — recall and occupancy; interpretation remains subject to alignment sensitivity.
 
 ## Planned sections
 

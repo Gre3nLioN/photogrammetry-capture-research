@@ -1,6 +1,6 @@
 # Minimum Viable Capture Budgets for Low-Cost Photogrammetry: An Exploratory Study of Coverage, Image Count, and Capture Cadence
 
-**Draft status:** Barn exploratory study and lightweight Helenenschacht external validation complete; bibliography, figures, and editorial revision pending.
+**Draft status:** Barn study and lightweight Helenenschacht check complete; initial cited literature map added. Full-paper review, direct subset/keyframe literature, figure validation, and editorial revision remain pending.
 
 ## Abstract
 
@@ -24,22 +24,27 @@ The work does not estimate absolute geometric accuracy. The full-capture reconst
 
 ## 2. Related Work
 
-This section remains pending a formal literature review. The final version should cover:
+### 2.1 Sparse and dense image-based reconstruction
 
-- structure-from-motion and multi-view stereo, including COLMAP;
-- image overlap, baseline, and viewpoint-diversity guidance;
-- next-best-view and coverage planning;
-- image subset selection and keyframe extraction from video;
-- photogrammetry quality assessment with and without reference geometry;
-- the Tanks and Temples benchmark.
+Schönberger and Frahm [1] describe an incremental structure-from-motion pipeline addressing robustness, accuracy, completeness, and scalability. COLMAP's dense reconstruction work is attributed to Schönberger et al. [2]. These references establish the reconstruction background and software provenance, not the validity of the capture-budget thresholds proposed here.
 
-Claims in the present draft rely only on the completed experiment artifacts. Bibliographic citations must be added before submission.
+### 2.2 Reference-based evaluation
+
+Tanks and Temples [3] provides realistic indoor/outdoor reconstruction sequences and independently laser-scanned reference data. ETH3D [4] combines diverse scenes, high-resolution imagery, and multi-camera video with laser-scanned references. These benchmarks motivate distinguishing reconstruction output from independently assessed geometry. Our study instead measures retention relative to a full-capture reconstruction; its recall is therefore not equivalent to benchmark ground-truth accuracy.
+
+### 2.3 View planning and mobile reconstruction
+
+Scott et al. [5] frame view planning as selecting sensor poses for specified reconstruction or inspection goals. Their survey addresses active triangulation range sensors, so it provides conceptual context rather than direct evidence for passive phone photogrammetry budgets. Kolev et al. [6] describe confidence-weighted depth integration and visibility handling for interactive mobile reconstruction. This demonstrates the relevance of geometry and observation quality to mobile reconstruction without establishing a minimum frame count or video cadence.
+
+### 2.4 Positioning and review gaps
+
+Our current contribution is a reproducible, scene-specific ablation separating internal consistency, reference completeness, and normalized spatial occupancy. This initial review is based on verified bibliographic records and available abstracts; it is not a systematic or full-text literature review. Direct image-subset selection, video keyframe extraction, controlled overlap/baseline studies, and modern smartphone capture studies remain to be reviewed before asserting novelty or giving general phone-video guidance. Verification notes are maintained in `literature-review.md`.
 
 ## 3. Dataset and Controlled Reference
 
 ### 3.1 Dataset
 
-The experiments use the Tanks and Temples Barn training image set. The local immutable source contains 410 ordered JPEG images. The archive and image tree are identified by SHA-256 fingerprints in `datasets/tanks-and-temples-barn.json`; raw images are not stored in the research repository.
+The experiments use the Tanks and Temples Barn training image set [3]. The local immutable source contains 410 ordered JPEG images. The archive and image tree are identified by SHA-256 fingerprints in `datasets/tanks-and-temples-barn.json`; raw images are not stored in the research repository.
 
 Every experiment materializes only symbolic links to selected source images. Each manifest records the complete selected filename list and a deterministic subset fingerprint. The raw image-tree fingerprint was checked throughout the study and remained unchanged.
 
@@ -53,7 +58,7 @@ The controlled reference is used for relative completeness and detail comparison
 
 ### 4.1 Reconstruction pipeline
 
-Every condition used COLMAP 4.1.0 with CUDA and the same pipeline:
+Every Barn condition used COLMAP 4.1.0 with CUDA [1, 2] and the same pipeline:
 
 1. GPU SIFT feature extraction with one shared camera model;
 2. exhaustive GPU feature matching;
@@ -174,7 +179,7 @@ All three conditions completed the full COLMAP pipeline, and all received an int
 
 ### 5.6 Lightweight external validation
 
-To test whether the frozen evaluation rules were specific only to Barn, we processed an independent 176-image aerial Helenenschacht dataset with the same broad COLMAP and ReconCheck workflow. A deterministic stride-2 subset used 88 symlinked images; the full 176-image reconstruction served as a practical reference. The subset registered 87/88 images, achieved full camera-sector coverage, and had a median view angle of 19.95°. Its internal status was nevertheless `warning` because P95 reprojection error was 2.266 px and median track length was 3 views.
+To test whether the frozen evaluation rules were specific only to Barn, we processed an independent 176-image aerial Helenenschacht dataset with the same broad COLMAP and ReconCheck workflow. A deterministic stride-2 subset used 88 symlinked images; the full 176-image reconstruction served as a practical reference. Both Helenenschacht runs used 1600-pixel dense processing, unlike the 1200-pixel Barn recipe; evaluation thresholds were unchanged. The subset registered 87/88 images, achieved full camera-sector coverage, and had a median view angle of 19.95°. Its internal status was nevertheless `warning` because P95 reprojection error was 2.266 px and median track length was 3 views.
 
 After similarity alignment using 87 shared camera centers, reference-surface recall was 70.64%, the largest missing-region fraction was 29.29%, and normalized fine occupancy was 3.62%. The evaluator therefore classified the subset as incomplete with poor detail fidelity. This result is consistent with the Barn study's central distinction between internal consistency and recovered object/detail content, while remaining scene- and pipeline-specific.
 
@@ -242,7 +247,7 @@ Results depend on COLMAP 4.1.0, exhaustive matching, shared-camera assumptions, 
 
 ### 8.7 Detail metric limitations
 
-Voxel occupancy measures spatial support, not texture quality, surface-normal error, edge sharpness, topology, or perceptual quality. Fine occupancy may be affected by outliers and density differences despite sampling normalization.
+Voxel occupancy measures spatial support, not texture quality, surface-normal error, edge sharpness, topology, or perceptual quality. Fine occupancy may be affected by outliers and density differences despite sampling normalization. It is also sensitive to residual alignment error and voxel-grid phase. In Helenenschacht, camera-center alignment RMSE (0.0486 scene units) is approximately 90% of the fine voxel width (0.0542), so its 3.62% occupancy score cannot be attributed to lost detail alone without alignment-sensitivity checks. Camera-center residuals are not direct surface-error estimates.
 
 ## 9. Practical Implications
 
@@ -268,4 +273,11 @@ The frozen evaluation rules transferred to one lightweight external scene check,
 
 ## References
 
-**TODO:** Add and verify formal bibliographic entries before submission. At minimum: COLMAP, Tanks and Temples, multi-view stereo quality evaluation, view planning, keyframe selection, and smartphone photogrammetry literature.
+1. Schönberger, J. L., and Frahm, J.-M. (2016). *Structure-from-Motion Revisited*. CVPR, 4104–4113. <https://doi.org/10.1109/CVPR.2016.445>
+2. Schönberger, J. L., Zheng, E., Frahm, J.-M., and Pollefeys, M. (2016). *Pixelwise View Selection for Unstructured Multi-View Stereo*. ECCV. <https://doi.org/10.1007/978-3-319-46487-9_31>
+3. Knapitsch, A., Park, J., Zhou, Q.-Y., and Koltun, V. (2017). *Tanks and Temples: Benchmarking Large-Scale Scene Reconstruction*. ACM Transactions on Graphics, 36(4). <https://doi.org/10.1145/3072959.3073599>
+4. Schöps, T., Schönberger, J. L., Galliani, S., Sattler, T., Schindler, K., Pollefeys, M., and Geiger, A. (2017). *A Multi-View Stereo Benchmark with High-Resolution Images and Multi-Camera Videos*. CVPR, 3260–3269. <https://doi.org/10.1109/CVPR.2017.272>
+5. Scott, W. R., Roth, G., and Rivest, J.-F. (2003). *View Planning for Automated Three-Dimensional Object Reconstruction and Inspection*. ACM Computing Surveys. <https://doi.org/10.1145/641865.641868>
+6. Kolev, K., Tanskanen, P., Speciale, P., and Pollefeys, M. (2014). *Turning Mobile Phones into 3D Scanners*. CVPR, 3946–3953. <https://doi.org/10.1109/CVPR.2014.504>
+
+Machine-readable records: `references.bib`. Verification scope and outstanding review tasks: `literature-review.md`.
