@@ -1,4 +1,4 @@
-# Minimum Viable Capture Budgets for Low-Cost Photogrammetry: An Exploratory Study of Coverage, Image Count, and Capture Cadence
+# Image Budget and Viewpoint Distribution in Photogrammetry: An Exploratory Study
 
 **Draft status:** Barn study and lightweight Helenenschacht check complete; initial cited literature map added. Full-paper review, direct subset/keyframe literature, figure validation, and editorial revision remain pending.
 
@@ -8,7 +8,7 @@ Low-cost photogrammetry guidance often emphasizes image count, but the spatial d
 
 ## 1. Introduction
 
-Modern phones provide sufficient image resolution for many photogrammetry tasks, shifting the practical problem from sensor capability toward capture behavior. A user may collect hundreds of images or extract frames from video while still undersampling a side, corner, roof edge, or other geometrically important region. Conversely, a smaller but evenly distributed capture may retain enough overlap and viewpoint diversity for a useful reconstruction.
+Mobile image-based reconstruction motivates practical questions about how users should distribute a limited capture budget [6]. A user may collect many images or extract frames from video while undersampling visibility-sensitive regions. Conversely, a smaller but distributed capture may retain useful overlap and viewpoint diversity. This study investigates that question using existing image datasets, not new phone captures; it does not assume that image resolution alone determines reconstruction quality.
 
 This study asks:
 
@@ -17,7 +17,7 @@ This study asks:
 The study makes three contributions:
 
 1. A reproducible experiment contract that preserves immutable source data and records image selection, reconstruction commands, software versions, execution outcomes, and report fingerprints.
-2. An evaluation that distinguishes internal structure-from-motion consistency from baseline-referenced object completeness and spatial detail fidelity.
+2. An evaluation that distinguishes internal structure-from-motion consistency from baseline-relative surface recall and normalized spatial occupancy, with explicit alignment-sensitivity limitations.
 3. An exploratory result showing that equal image counts can produce radically different outcomes when image distribution changes.
 
 The work does not estimate absolute geometric accuracy. The full-capture reconstruction is a controlled reference, not laser-scanned ground truth. Results therefore quantify degradation relative to that reference and should not be interpreted as universal capture thresholds.
@@ -26,7 +26,9 @@ The work does not estimate absolute geometric accuracy. The full-capture reconst
 
 ### 2.1 Sparse and dense image-based reconstruction
 
-Schönberger and Frahm [1] describe an incremental structure-from-motion pipeline addressing robustness, accuracy, completeness, and scalability. COLMAP's dense reconstruction work is attributed to Schönberger et al. [2]. These references establish the reconstruction background and software provenance, not the validity of the capture-budget thresholds proposed here.
+Schönberger and Frahm [1] describe an incremental structure-from-motion pipeline addressing robustness, accuracy, completeness, and scalability. In dense reconstruction, Schönberger et al. [2, Section 4.2] select supporting views at each pixel using photometric evidence and geometric priors for triangulation angle, relative resolution, and incident angle. They explain why photometrically similar, nearly zero-baseline views can be uninformative for depth. Cross-view geometric consistency and fusion support are treated separately [2, Sections 4.5 and 4.7].
+
+This provides a geometric rationale for studying redundancy and viewpoint distribution, but not for the thresholds proposed here. Their pixelwise source-view selection operates inside dense reconstruction; our experiment removes images globally before feature extraction and mapping. The algorithm's “temporal” view-selection smoothness concerns optimization iterations, not video capture cadence [2, Section 4.3].
 
 ### 2.2 Reference-based evaluation
 
@@ -38,7 +40,7 @@ Scott et al. [5] frame view planning as selecting sensor poses for specified rec
 
 ### 2.4 Positioning and review gaps
 
-Our current contribution is a reproducible, scene-specific ablation separating internal consistency, reference completeness, and normalized spatial occupancy. This initial review is based on verified bibliographic records and available abstracts; it is not a systematic or full-text literature review. Direct image-subset selection, video keyframe extraction, controlled overlap/baseline studies, and modern smartphone capture studies remain to be reviewed before asserting novelty or giving general phone-video guidance. Verification notes are maintained in `literature-review.md`.
+Our current contribution is a reproducible, scene-specific ablation separating internal consistency, reference completeness, and normalized spatial occupancy. The current review combines verified bibliographic records and available abstracts with a full-text review of the author-hosted MVS paper [2]; it is not a systematic review. Direct image-subset selection, video keyframe extraction, controlled overlap/baseline studies, and modern smartphone capture studies remain to be reviewed before asserting novelty or giving general phone-video guidance. Verification notes are maintained in `literature-review.md`.
 
 ## 3. Dataset and Controlled Reference
 
@@ -52,7 +54,7 @@ Every experiment materializes only symbolic links to selected source images. Eac
 
 The controlled reference experiment, `barn-full-controlled`, uses all 410 images. It registered 410/410 images and produced 206,930 sparse points, a fused dense cloud, and a Poisson mesh. Its ReconCheck internal-consistency verdict was `good`.
 
-The controlled reference is used for relative completeness and detail comparisons. It is not ground-truth geometry and may contain its own reconstruction errors, smoothing, holes, and outliers.
+The controlled reference is used for relative completeness and occupancy comparisons. It is not ground-truth geometry and may contain its own reconstruction errors, smoothing, holes, and outliers. Archived comparison files also retain an earlier full-capture quality-report baseline with 206,801 sparse points, whereas the controlled run has 206,930. Their internal-metric deltas must not be mistaken for deltas against the controlled run. The results table reports each condition's own internal verdict and dense-reference scores; it does not use those legacy deltas.
 
 ## 4. Experimental Methodology
 
@@ -72,7 +74,7 @@ Commands, timestamps, exit codes, durations, logs, software versions, and output
 
 ### 4.2 Conditions
 
-The completed study contains 16 reconstructions: one controlled reference and 15 experimental conditions.
+The Barn study contains 16 reconstructions: one controlled reference and 15 reduced-image conditions. The 12 fixed-budget coverage/gap/cadence conditions each retain 103 images; three stride conditions vary image budget. This is an exploratory subset of the broader protocol, not completion of its planned random-seed and decimation schedule. The Helenenschacht full and reduced runs are additional reconstructions reported separately.
 
 #### Uniform temporal reduction
 
@@ -98,15 +100,21 @@ Half of the image budget was concentrated inside one fifth of the ordered route,
 
 ### 4.3 Internal-consistency evaluation
 
-ReconCheck's `general-photogrammetry-v1` profile evaluates registration ratio, P95 reprojection error, median track length, median maximum view angle, camera-sector occupancy, and dense/mesh availability. This status describes whether the reconstruction is internally consistent for the images it received. It does not establish whether the complete intended object was reconstructed.
+ReconCheck's `general-photogrammetry-v1` profile screens registration ratio, P95 reprojection error, median track length, median maximum view angle, camera-sector occupancy, and dense/mesh availability. Its requirements are registration ≥95%, P95 error ≤2 pixels, median track length ≥4 views, median maximum view angle ≥8°, sector occupancy ≥75%, and both output types present. Reprojection percentiles summarize errors associated with reconstructed 3D points, not a pooled percentile of all individual image residuals. The view angle is the maximum supported angle for each point, summarized by its median.
+
+These heuristic checks describe consistency and support for the supplied images; they do not certify accuracy or observation of the complete intended object. ReconCheck's sector diagnostic bins camera centers in the world XY plane. That diagnostic is distinct from the best-fit PCA-plane sectors used to select omitted views, and neither measures surface visibility directly.
 
 ### 4.4 Baseline-referenced completeness
 
-Experiment and reference coordinate systems were aligned with an Umeyama similarity transform estimated from camera centers shared by filename. Reference dense points were considered recovered when an aligned experiment point lay within 0.5% of the reference point-cloud bounding-box diagonal. The analysis reports:
+Experiment and reference coordinate systems were aligned with a similarity transform estimated by SVD from camera centers shared by filename. Analysis deterministically samples PLY vertices in file order, with caps of 250,000 reference-query points and 1,000,000 points each for the reference ceiling and experiment cloud. The actual sample counts depend on the integer sampling stride. The diagonal and thresholds are computed from the reference-query sample, not independent survey coordinates.
+
+For each sampled reference point, the nearest aligned experiment point is found. Reference recall is the fraction whose nearest-neighbor distance is at most 0.5% of that reference sample's bounding-box diagonal. This one-way score measures agreement with the reference: low recall may reflect missing geometry, displaced surfaces, or reference errors; it does not distinguish these causes. It also does not penalize additional experiment geometry directly. The analysis reports:
 
 - reference-surface recall;
 - missing reference-surface fraction; and
-- the largest connected missing region in a deterministic voxelization.
+- the largest connected region of reference points outside the distance tolerance.
+
+For that region diagnostic, out-of-tolerance reference points are voxelized at twice the distance tolerance. Components use 26-neighbor adjacency; the largest is selected by reference-point count, not physical surface area. Its fraction is relative to all reference-query points. “Missing region” is therefore a metric label for disagreement, not independently confirmed absence.
 
 The exploratory decision rule was:
 
@@ -116,7 +124,9 @@ The exploratory decision rule was:
 
 ### 4.5 Detail fidelity
 
-Detail fidelity was measured using deterministic voxel occupancy at three scales. The fine cell width was 0.25% of the reference bounding-box diagonal. Occupancy recall was normalized against the reference cloud's own deterministic sampling ceiling.
+The study's operational detail-fidelity proxy is deterministic spatial voxel occupancy, not a direct measure of surface sharpness or perceptual fidelity. Cell widths are 0.25%, 0.5%, and 1% of the reference-query bounding-box diagonal. At each scale, raw occupancy is the fraction of occupied reference-query cells also occupied by the aligned experiment sample.
+
+This fraction is divided by the reference cloud's own sampling ceiling: the fraction of reference-query cells occupied by the larger reference sample. The normalized value is capped at 1. Grid origin is fixed at coordinate zero for the frozen evaluation. Density, residual alignment, and grid phase can affect the score even when recognizable surfaces remain. The published labels below are operational bands for this proxy, not validated detail-quality categories.
 
 The exploratory bands were:
 
@@ -130,7 +140,7 @@ These rules were calibrated during the exploratory study and frozen before the u
 
 ## 5. Results
 
-### 5.1 Complete result table
+### 5.1 Barn result table
 
 | Condition | Images | Internal | Task | Completeness | Detail | Surface recall | Fine occupancy |
 |---|---:|---|---|---|---|---:|---:|
@@ -151,7 +161,7 @@ These rules were calibrated during the exploratory study and frozen before the u
 | Burst in middle | 103 | good | warning | partial | degraded | 96.8% | 66.2% |
 | Burst at end | 103 | good | poor | incomplete | degraded | 94.7% | 62.4% |
 
-![Baseline-relative surface recall and normalized fine detail](figures/coverage-detail-summary.svg)
+![Baseline-relative surface recall and normalized fine occupancy](figures/coverage-detail-summary.svg)
 
 **Figure 1.** Baseline-relative surface recall and normalized fine occupancy for uniform Barn reductions and the Helenenschacht external check. Dashed lines show the recall requirement and preserved-occupancy threshold; complete-object classification additionally requires a largest missing-region fraction below 2%. Helenenschacht bars retain the frozen camera-aligned scores. Diagnostic surface-refined scores are annotated separately, not substituted. The original occupancy score is alignment-sensitive and is not a pure detail-loss estimate.
 
@@ -159,7 +169,7 @@ These rules were calibrated during the exploratory study and frozen before the u
 
 Uniform reduction produced the clearest budget trend. Retaining every third frame preserved 99.5% reference-surface recall and 80.9% normalized fine occupancy, meeting the exploratory `good` rule. Every fourth frame preserved the object at 98.4% recall but reduced fine occupancy to 69.9%, producing a warning for degraded detail. Every fifth frame reduced recall to 96.9% and fine occupancy to 68.1%; its internal verdict also dropped to warning because median track length fell from four to three.
 
-For this scene, the useful distinction was not simply success versus failure. The 25% and 20% conditions remained recognizable and usable for some purposes, but did not preserve reference-level detail.
+These outcomes distinguish reconstruction completion from reference agreement. The tested 25% and 20% conditions retained substantial reference support but failed the preserved-occupancy band. No user-task study established their practical usability, and these three tested budgets do not locate an exact minimum capture requirement.
 
 ### 5.3 Angular coverage omissions
 
@@ -189,7 +199,7 @@ After similarity alignment using 87 shared camera centers, reference-surface rec
 
 ## 6. Discussion
 
-### 6.1 Viewpoint distribution dominates nominal count
+### 6.1 Nominal count alone does not predict the tested outcomes
 
 The 103-image conditions held image count constant while varying distribution. Their surface recall ranged from 29.4% to 98.8%, and fine occupancy ranged from 3.6% to 71.2%. The same image budget therefore supported outcomes from nearly complete to severely incomplete.
 
@@ -197,9 +207,9 @@ The 103-image conditions held image count constant while varying distribution. T
 
 Several route-gap and sector conditions reconstructed the overall Barn while losing local detail. A binary success measure based on registration or output-file existence would miss this degradation. Reporting completeness and detail separately provides a more useful description of practical quality.
 
-### 6.3 Internal consistency is necessary but insufficient
+### 6.3 Internal consistency does not certify reference agreement
 
-Except for stride 5, all reduced conditions retained an internal ReconCheck `good` verdict. Yet four task conditions were incomplete and received a poor task verdict under baseline-relative evaluation. Reprojection and track statistics describe consistency among selected images; they cannot reveal geometry that was never observed.
+Except for stride 5, all reduced Barn conditions retained an internal ReconCheck `good` verdict. Yet four conditions failed the completeness rule and received a poor task verdict under baseline-relative evaluation. Reprojection and track statistics describe consistency among selected images; they cannot directly establish recovery of unobserved reference surfaces. This result does not establish that every internal screening requirement is necessary for every downstream application.
 
 ### 6.4 External validation and scope
 
@@ -213,7 +223,7 @@ For this scene, a distributed one-third sample was a stronger capture than sever
 
 The external validation is recorded in `reports/external-validation-helenenschacht-lite.md` and `reports/helenenschacht-stride-2-completeness.json`. The derived run contains the deterministic stride-2 manifest, symlinked image subset, exact pipeline script, stage logs, sparse model, dense cloud, and mesh.
 
-Every experiment directory contains:
+Each Barn experiment directory contains:
 
 - `experiment-manifest.json`: hypothesis, selection parameters, complete filename lists, and subset fingerprint;
 - `execution.json`: exact COLMAP commands, versions, timings, and stage outcomes;
@@ -221,7 +231,9 @@ Every experiment directory contains:
 - `comparison.json`: baseline-relative completeness, detail, and task verdict; and
 - `report.md`: a human-readable result.
 
-The research repository contains deterministic selection code, schemas, tests, and CI for Linux, macOS, and Windows. Large reconstruction outputs remain derived local artifacts rather than versioned source inputs.
+The research repository contains deterministic selection code, schemas, tests, and CI for Linux, macOS, and Windows. This CI covers research software checks, not replication of the GPU reconstruction results on all three platforms. Large reconstruction outputs remain derived local artifacts rather than versioned source inputs.
+
+Helenenschacht is documented in reports rather than the full Barn artifact contract. Its derived manifest, pipeline logs, and reconstructions remain local; report paths and cache fingerprints alone do not constitute a portable public replication package. The exploratory surface refinement is documented as a procedure and figure, without new published scripts or test code, in keeping with this report's publication scope.
 
 ## 8. Threats to Validity
 
@@ -265,15 +277,17 @@ The exploratory evidence supports the following scene-specific guidance:
 
 ## 10. Conclusion
 
-A low image budget can produce a useful reconstruction when viewpoints remain distinct and evenly distributed. In the Barn study, a uniform one-third sample preserved both object completeness and the declared level of detail, while a one-quarter sample preserved the object but degraded detail. At the same 103-image budget, uneven sampling and missing angular coverage produced outcomes ranging from warning-level degradation to severe incompleteness. The practical minimum was therefore governed by viewpoint distribution as much as by image count.
+In the tested Barn recipe, a uniform one-third sample met the declared reference-recall and occupancy bands, while a one-quarter sample met completeness but not preserved occupancy. At the same 103-image budget, changing viewpoint distribution produced markedly different reference agreement despite similar internal verdicts. Image count and successful registration alone therefore did not determine these evaluation outcomes.
 
-The frozen evaluation rules transferred to one lightweight external scene check, but broader validation remains necessary. The next steps are verified literature review, figures, and controlled experiments with actual phone video across multiple scenes.
+The Helenenschacht check exposed both cross-scene disagreement and substantial alignment sensitivity. It does not independently validate the thresholds or isolate pure detail loss. The study supports reporting internal consistency, reference recall, and spatial occupancy separately, with alignment diagnostics and scene-specific limitations. Exact minimum capture budgets, perceptual usefulness, and general phone-video guidance remain open questions.
 
 ## Data and Artifact Availability
 
 - Research repository: <https://github.com/Gre3nLioN/photogrammetry-capture-research>
 - Quality instrument: <https://github.com/Gre3nLioN/reconcheck>
-- Dataset source: <https://www.tanksandtemples.org/download/>
+- Barn dataset source: <https://www.tanksandtemples.org/download/>
+- Helenenschacht dataset source: <https://github.com/OpenDroneMap/odm_data_helenenschacht>
+- Large raw inputs and reconstruction outputs are not included in the research Git repository. Data use remains subject to the upstream dataset terms.
 
 ## References
 

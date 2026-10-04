@@ -1,12 +1,13 @@
 # Academic paper track
 
-Working title: **Minimum Viable Capture Budgets for Low-Cost Photogrammetry: An Exploratory Study of Coverage, Image Count, and Capture Cadence**
+Working title: **Image Budget and Viewpoint Distribution in Photogrammetry: An Exploratory Study**
 
 Current draft: [`manuscript.md`](manuscript.md)
 
 Status: Barn study and Helenenschacht external check drafted; initial literature map and bibliography added. Full-text review, subset/keyframe coverage, figure validation, and editorial revision remain pending.
 
 - [Literature evidence map](literature-review.md) — sources, verification scope, and outstanding tasks.
+- [Manuscript audit](manuscript-audit.md) — artifact checks, claim corrections, and submission blockers.
 - [BibTeX bibliography](references.bib) — six initial citation records.
 - [Summary figure](figures/coverage-detail-summary.svg) — recall and occupancy; interpretation remains subject to alignment sensitivity.
 
