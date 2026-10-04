@@ -3,7 +3,7 @@ title: Lightweight External Validation — Helenenschacht
 type: synthesis
 tags: [work, photogrammetry, validation]
 created: 2026-10-02
-updated: 2026-10-02
+updated: 2026-10-04
 sources: [Helenenschacht COLMAP reconstruction, ReconCheck frozen quality profile]
 ---
 
@@ -16,7 +16,8 @@ A fast external check of the frozen ReconCheck internal-consistency metrics on t
 - All 176/176 images registered.
 - Median view angle and eight-sector camera coverage pass the frozen thresholds.
 - P95 reprojection error (2.27 px) and median track length (3 views) fail the frozen screening thresholds.
-- This validates that the protocol is discriminative outside Barn, but does not validate completeness or detail-fidelity thresholds.
+- The frozen scores distinguish internal consistency from reference agreement outside Barn, but do not validate universal completeness or detail thresholds.
+- Alignment sensitivity materially changes geometry/occupancy scores; original occupancy cannot be read as pure detail loss.
 
 ## Details
 
@@ -96,7 +97,9 @@ The frozen dense-reference evaluator aligned the subset to the full reconstructi
 | Normalized reference-scale occupancy | See JSON artifact | — |
 | Normalized coarse occupancy | See JSON artifact | — |
 
-The result is a strong external stress test: the reduced Helenenschacht capture retained acceptable registration and view-angle statistics but lost substantial reference geometry and fine occupancy. This supports keeping internal consistency separate from completeness and detail fidelity. It also demonstrates that the frozen thresholds produce a decisive failure on a second scene without retuning.
+The reduced Helenenschacht capture retained acceptable registration and view-angle statistics but scored poorly against the practical reference. A subsequent exploratory rigid surface refinement raised recall from 70.64% to 83.79% and normalized fine occupancy from 3.62% to 51.33%. Camera-center RMSE worsened from 0.04859 to 0.11952 scene units. Both tested alignments fail the frozen acceptance rules, but the original score magnitude cannot isolate missing geometry or lost detail from alignment and reconstruction disagreement.
+
+See [[helenenschacht-alignment-sensitivity]] for the method, shared-projection overlays, and distance maps. Refinement is diagnostic only; the frozen JSON artifact and evaluation rules remain unchanged.
 
 This is still scene- and pipeline-specific evidence. Helenenschacht is an aerial dataset, and the full reconstruction is used as a practical reference rather than absolute ground truth.
 
@@ -109,6 +112,7 @@ This lightweight external check supports retaining the separation between intern
 ## Related Pages
 
 - [[core-study-summary]]
+- [[helenenschacht-alignment-sensitivity]]
 - [[protocols/01-coverage-and-frame-rate]]
 - [[../photogrammetry-quality-auditor/runs/helenenschacht-colmap-v1/README]]
 
