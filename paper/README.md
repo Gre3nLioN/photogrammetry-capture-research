@@ -4,11 +4,12 @@ Working title: **Image Budget and Viewpoint Distribution in Photogrammetry: An E
 
 Current draft: [`manuscript.md`](manuscript.md)
 
-Status: Barn study and Helenenschacht external check drafted; initial literature map and bibliography added. Full-text review, subset/keyframe coverage, figure validation, and editorial revision remain pending.
+Status: Barn study and Helenenschacht sensitivity check drafted; artifact audit and targeted full-text subset/keyframe review completed. Broader literature coverage, final reference checks, and submission preparation remain pending.
 
 - [Literature evidence map](literature-review.md) — sources, verification scope, and outstanding tasks.
 - [Manuscript audit](manuscript-audit.md) — artifact checks, claim corrections, and submission blockers.
-- [BibTeX bibliography](references.bib) — six initial citation records.
+- [Subset/keyframe full-text review](subset-keyframe-review.md) — selection-stage and evaluation distinctions from three primary papers.
+- [BibTeX bibliography](references.bib) — nine citation records.
 - [Summary figure](figures/coverage-detail-summary.svg) — recall and occupancy; interpretation remains subject to alignment sensitivity.
 
 ## Planned sections

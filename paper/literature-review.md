@@ -1,7 +1,7 @@
 ---
 title: Capture Research Literature Review — Initial Evidence Map
 type: synthesis
-tags: [work, photogrammetry, literature]
+tags: [life, work, photogrammetry, literature]
 created: 2026-10-03
 updated: 2026-10-04
 sources: [Crossref, Computer Vision Foundation, Tanks and Temples, COLMAP author website]
@@ -13,7 +13,8 @@ A focused initial reference map for the manuscript, with verification scope dist
 
 ## Key Points
 
-- Six references cover sparse/dense reconstruction, benchmark evaluation, view planning, and mobile reconstruction.
+- Nine references cover sparse/dense reconstruction, benchmark evaluation, view planning, mobile reconstruction, global image subsets, and geometric keyframes.
+- Full-text reviews now cover the MVS paper and three directly related subset/keyframe/network papers.
 - Bibliographic verification is not equivalent to full methodological review.
 - None of these sources validates our 97% completeness or 80% occupancy thresholds.
 - No claim of novelty over all image-subset or keyframe-selection methods is justified yet.
@@ -53,8 +54,8 @@ Read the complete 17-page author-hosted PDF, including methods, experiments, and
 
 ### Remaining review work
 
-1. Read the remaining complete cited papers and record relevant method/evaluation passages; MVS full-text review is complete, excluding its supplement.
-2. Review direct image-subset selection, video keyframe extraction, and controlled overlap/baseline studies.
+1. Read the remaining complete cited papers and record relevant method/evaluation passages; full-text review covers [2, 7–9], with detailed notes in [[subset-keyframe-review]].
+2. Extend direct image-subset/keyframe coverage to earlier photogrammetric selection work and modern video extraction studies; review controlled overlap/baseline studies.
 3. Review modern smartphone photogrammetry studies, including compression, rolling shutter, blur, and calibration effects.
 4. Verify the novelty claim against that literature; retain only descriptive contributions meanwhile.
 5. Extend independent alignment checks: the completed Helenenschacht diagnostic confirms strong surface-alignment sensitivity, while the five tested grid phases change scores little. See [[helenenschacht-alignment-sensitivity]].
@@ -64,7 +65,8 @@ Read the complete 17-page author-hosted PDF, including methods, experiments, and
 - [[manuscript]]
 - [[external-validation-helenenschacht-lite]]
 - [[core-study-summary]]
+- [[subset-keyframe-review]]
 
 ## Source Notes
 
-`references.bib` stores the six citation records. Metadata omitted from the BibTeX was not guessed. The initial literature pass does not support universal capture thresholds or a validated perceptual detail metric.
+`references.bib` stores nine citation records. The initial six-reference abstract/metadata pass was extended on 2026-10-04 by full-text reviews of Snavely et al. (2008), Azimi et al. (2022), and Hosseininaveh and Remondino (2021). Their publication identities were checked through Crossref and PDF title pages; source hashes and detailed distinctions are recorded in `subset-keyframe-review.md`. Metadata omitted from the BibTeX was not guessed. The initial literature pass does not support universal capture thresholds or a validated perceptual detail metric.

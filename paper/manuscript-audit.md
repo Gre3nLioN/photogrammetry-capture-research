@@ -1,7 +1,7 @@
 ---
 title: Photogrammetry Manuscript Consistency Audit
 type: synthesis
-tags: [work, photogrammetry, publication]
+tags: [life, work, photogrammetry, publication]
 created: 2026-10-04
 updated: 2026-10-04
 sources: [Barn comparison artifacts, frozen evaluator, Helenenschacht reports, MVS author paper]
@@ -42,7 +42,7 @@ An artifact and claim audit of the exploratory manuscript, with unresolved submi
 
 ### Remaining submission blockers
 
-- **Direct prior art:** full-text global image-subset and video-keyframe-selection studies remain unreviewed; a novelty claim is not justified.
+- **Direct prior art:** targeted full-text reviews now cover skeletal SfM, geometric visual-inertial keyframes, and photogrammetric building network design. They establish that geometric selection and quality tradeoffs are prior knowledge. Earlier selection work and modern phone/video studies still require review; a broad novelty claim is not justified.
 - **Bibliography:** resolve the MVS author-order discrepancy between author-hosted PDF and Crossref; verify final proceedings metadata and remaining complete papers.
 - **Alignment:** Helenenschacht diagnostic refinement improves surface agreement while worsening camera agreement; no independent correct alignment is established. The Barn occupancy scores have not received the same sensitivity audit.
 - **Evaluation scope:** thresholds remain exploratory. No independent geometry, repeat-run uncertainty, perceptual-quality assessment, or actual phone-video experiment is reported.

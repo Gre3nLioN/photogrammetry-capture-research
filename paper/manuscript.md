@@ -1,6 +1,6 @@
 # Image Budget and Viewpoint Distribution in Photogrammetry: An Exploratory Study
 
-**Draft status:** Barn study and lightweight Helenenschacht check complete; initial cited literature map added. Full-paper review, direct subset/keyframe literature, figure validation, and editorial revision remain pending.
+**Draft status:** Barn study, Helenenschacht sensitivity check, artifact audit, and targeted full-text subset/keyframe review completed. Broader literature coverage, final bibliography checks, and submission preparation remain pending.
 
 ## Abstract
 
@@ -38,9 +38,26 @@ Tanks and Temples [3] provides realistic indoor/outdoor reconstruction sequences
 
 Scott et al. [5] frame view planning as selecting sensor poses for specified reconstruction or inspection goals. Their survey addresses active triangulation range sensors, so it provides conceptual context rather than direct evidence for passive phone photogrammetry budgets. Kolev et al. [6] describe confidence-weighted depth integration and visibility handling for interactive mobile reconstruction. This demonstrates the relevance of geometry and observation quality to mobile reconstruction without establishing a minimum frame count or video cadence.
 
-### 2.4 Positioning and review gaps
+### 2.4 Global image subsets and geometric keyframes
 
-Our current contribution is a reproducible, scene-specific ablation separating internal consistency, reference completeness, and normalized spatial occupancy. The current review combines verified bibliographic records and available abstracts with a full-text review of the author-hosted MVS paper [2]; it is not a systematic review. Direct image-subset selection, video keyframe extraction, controlled overlap/baseline studies, and modern smartphone capture studies remain to be reviewed before asserting novelty or giving general phone-video guidance. Verification notes are maintained in `literature-review.md`.
+Snavely et al. [7] select a skeletal image core using camera-position uncertainty and graph connectivity to accelerate SfM. Crucially, they subsequently add remaining images through pose estimation and optionally perform full bundle adjustment. Their sparse-reconstruction strategy is not equivalent to permanently discarding the omitted images before dense reconstruction, as done here. Their evaluation emphasizes runtime, image registration, and camera-position agreement rather than our dense-reference occupancy measures.
+
+Azimi et al. [8] select geometric keyframes within visual-inertial SLAM using viewing-vector changes, point distribution, and IMU events. They evaluate trajectory error and processing time on two EuRoC sequences, with repeated trajectory-error evaluations. These positioning endpoints and online sensor constraints differ from our offline global-image-removal experiment; successful localization does not establish complete-object dense reconstruction.
+
+More directly, Hosseininaveh and Remondino [9] design photogrammetric image networks for building reconstruction using a rough model, camera/range constraints, and visibility-based viewpoint selection. Their simulation and real-building experiments compare center/façade capture directions and continuous versus selected capture. They examine survey-point errors, visible gaps, point density, and local plane-fit noise, already demonstrating that viewpoint geometry and multiple quality dimensions matter. Their 1,489-image continuous capture and 236-image selected subset are not direct benchmarks for our thresholds: the scene, selection method, Metashape pipeline, and evaluation endpoints differ.
+
+| Prior work | Selection purpose | Primary evaluated outcomes | Difference from this study |
+|---|---|---|---|
+| Skeletal graphs [7] | Efficient sparse optimization, then add remaining views | Runtime, registration, camera positions | Omitted views are not permanently removed |
+| Geometric keyframes [8] | Online visual-inertial positioning | Trajectory error, runtime | No evaluation of our dense-object metrics |
+| Building imaging network [9] | Plan/select geometrically useful building views | Survey errors, gaps, density, plane-fit noise | Geometry-aware selection rather than fixed-budget removal ablations |
+| Present study | Describe effects of deterministic capture removal | Internal status, reference recall, spatial occupancy | Fixed recipe and explicit alignment-sensitivity caveats |
+
+### 2.5 Positioning and review scope
+
+Geometry-aware image selection and multidimensional reconstruction quality are established topics, not discoveries claimed here. Our contribution is a descriptive, reproducible ablation across equal-budget omissions and burst profiles, with separate internal and dense-reference diagnostics. We do not introduce an optimal selector or claim superiority over [7–9]; none of those algorithms was implemented as a comparison condition.
+
+The review includes full texts of [2, 7–9], with other citations checked through abstracts and metadata. It is targeted rather than systematic. Earlier photogrammetric selection studies, broader overlap/baseline research, and modern smartphone/video capture literature still require review before a stronger novelty claim or general capture recommendation. Evidence notes are maintained in `literature-review.md` and `subset-keyframe-review.md`.
 
 ## 3. Dataset and Controlled Reference
 
@@ -297,5 +314,8 @@ The Helenenschacht check exposed both cross-scene disagreement and substantial a
 4. Schöps, T., Schönberger, J. L., Galliani, S., Sattler, T., Schindler, K., Pollefeys, M., and Geiger, A. (2017). *A Multi-View Stereo Benchmark with High-Resolution Images and Multi-Camera Videos*. CVPR, 3260–3269. <https://doi.org/10.1109/CVPR.2017.272>
 5. Scott, W. R., Roth, G., and Rivest, J.-F. (2003). *View Planning for Automated Three-Dimensional Object Reconstruction and Inspection*. ACM Computing Surveys. <https://doi.org/10.1145/641865.641868>
 6. Kolev, K., Tanskanen, P., Speciale, P., and Pollefeys, M. (2014). *Turning Mobile Phones into 3D Scanners*. CVPR, 3946–3953. <https://doi.org/10.1109/CVPR.2014.504>
+7. Snavely, N., Seitz, S. M., and Szeliski, R. (2008). *Skeletal Graphs for Efficient Structure from Motion*. CVPR. <https://doi.org/10.1109/CVPR.2008.4587678>
+8. Azimi, A., Hosseininaveh, A., and Remondino, F. (2022). *A Novel Geometric Key-Frame Selection Method for Visual-Inertial SLAM and Odometry Systems*. ISPRS Archives, XLIII-B2-2022, 9–14. <https://doi.org/10.5194/isprs-archives-XLIII-B2-2022-9-2022>
+9. Hosseininaveh, A., and Remondino, F. (2021). *An Imaging Network Design for UGV-Based 3D Reconstruction of Buildings*. Remote Sensing, 13(10), 1923. <https://doi.org/10.3390/rs13101923>
 
-Machine-readable records: `references.bib`. Verification scope and outstanding review tasks: `literature-review.md`.
+Machine-readable records: `references.bib`. Verification scope and outstanding review tasks: `literature-review.md` and `subset-keyframe-review.md`.
