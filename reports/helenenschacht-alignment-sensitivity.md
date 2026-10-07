@@ -1,9 +1,9 @@
 ---
 title: Helenenschacht Alignment Sensitivity
 type: synthesis
-tags: [work, photogrammetry, validation, sensitivity]
+tags: [life, work, photogrammetry, validation, sensitivity]
 created: 2026-10-03
-updated: 2026-10-04
+updated: 2026-10-07
 sources: [Helenenschacht full and stride-2 derived reconstructions]
 ---
 
@@ -73,6 +73,8 @@ This check was executed interactively using existing evaluator helpers and NumPy
 The figure uses one reference-derived PCA basis, common reference bounds, and equal aspect scales for both alignments. Rows show PC1/PC2 and PC1/PC3 projections; columns compare cloud overlays and reference-to-subset nearest-neighbor distances before and after refinement. Blue overlay points are the reference; orange points are the subset. Distance colors use fixed bands: blue ≤ fine voxel width, green ≤ frozen tolerance, amber ≤ twice that tolerance, red above twice the tolerance. Red denotes reference disagreement, not proven missing geometry.
 
 Visual inspection shows the dominant near-planar surface becomes substantially better aligned after refinement, while peripheral and below-plane disagreement remains. This is consistent with the changed distance statistics but cannot separate missing geometry, scene differences, and local reconstruction errors. Two-dimensional projections can hide depth differences and are not independent ground truth.
+
+For the final report's readable two-column distance-map figure, `paper/figures/helenenschacht-distance-panels.png` is an unchanged crop of the original figure: `magick paper/figures/helenenschacht-alignment-overlays.png -crop 940x915+980+100 +repage paper/figures/helenenschacht-distance-panels.png`. It retains all four distance panels and their projection labels; the legend and interpretation are in the manuscript caption. No point, distance band, or score was recomputed for this layout change. The complete overlay figure above remains available.
 
 The overlays display 24,000 equally spaced reference-sample indexes and 18,000 subset-sample indexes. The maps display the same reference indexes colored by distances computed against the complete sampled subset, with higher distances drawn last. The PCA basis is derived by SVD from every eighth reference-sample point, centered on the full reference sample; each basis-vector sign is fixed by making its largest-magnitude component positive.
 

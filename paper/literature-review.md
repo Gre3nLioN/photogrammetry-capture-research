@@ -1,20 +1,21 @@
 ---
-title: Capture Research Literature Review — Initial Evidence Map
+title: Capture Research Literature Review — Targeted Evidence Map
 type: synthesis
 tags: [life, work, photogrammetry, literature]
 created: 2026-10-03
-updated: 2026-10-04
+updated: 2026-10-07
 sources: [Crossref, Computer Vision Foundation, Tanks and Temples, COLMAP author website]
 ---
 
-# Capture Research Literature Review — Initial Evidence Map
+# Capture Research Literature Review — Targeted Evidence Map
 
-A focused initial reference map for the manuscript, with verification scope distinguished from full-paper review.
+A focused reference map for the final exploratory report, distinguishing metadata verification from full-text methodological review.
 
 ## Key Points
 
-- Nine references cover sparse/dense reconstruction, benchmark evaluation, view planning, mobile reconstruction, global image subsets, and geometric keyframes.
-- Full-text reviews now cover the MVS paper and three directly related subset/keyframe/network papers.
+- Ten references cover sparse/dense reconstruction, benchmark evaluation, view planning, mobile reconstruction, global subsets, keyframes, and acquisition geometry.
+- Full texts of [2, 7–10] were reviewed; background sources [1, 3–6] were checked through metadata and abstracts.
+- All ten DOI records were checked against Crossref on 2026-10-07; final Springer metadata resolves the MVS author-order issue.
 - Bibliographic verification is not equivalent to full methodological review.
 - None of these sources validates our 97% completeness or 80% occupancy thresholds.
 - No claim of novelty over all image-subset or keyframe-selection methods is justified yet.
@@ -30,7 +31,11 @@ Verified on 2026-10-03 using Crossref metadata, official CVF proceedings pages, 
 | knapitsch2017tanks | Crossref abstract; official benchmark description/BibTeX | Barn source attribution; benchmark has independently laser-scanned references | Our study uses a reconstructed baseline, not that ground truth |
 | schoeps2017eth3d | Crossref; CVF abstract and proceedings record | Diverse indoor/outdoor scenes, DSLR and stereo-video inputs, laser-scanned reference | Does not supply a universal phone frame-rate recommendation |
 | scott2003viewplanning | Crossref abstract and metadata | Pose selection for reconstruction/inspection objectives | Survey concerns active triangulation range sensors, not our passive SfM recipe |
-| kolev2014mobile | CVF abstract and proceedings record; DOI in Tanks and Temples Crossref references | Interactive mobile depth integration with confidence and visibility handling | Not a controlled minimum-image-budget study; DOI not independently resolved in this pass |
+| kolev2014mobile | CVF abstract and proceedings record; Crossref DOI record rechecked 2026-10-07 | Interactive mobile depth integration with confidence and visibility handling | Not a controlled minimum-image-budget study |
+| snavely2008skeletal | Crossref and complete author PDF including supplement | Uncertainty/graph-based sparse core, followed by registering remaining views | Not permanent removal of dense-reconstruction inputs |
+| azimi2022keyframe | Crossref and complete publisher PDF | Geometric visual-inertial keyframes and trajectory/runtime evaluation | Localization endpoint differs from dense-object agreement |
+| hosseininaveh2021network | Crossref and complete publisher PDF | Building network design, viewpoint selection, completeness/precision tradeoffs | Different scene, selector, pipeline, and quality endpoints |
+| wenzel2013acquisition | Crossref and complete eight-page publisher PDF | Baseline/matching/precision tradeoffs and overlap-aware capture | Supports useful complementary redundancy, not elimination of all overlap |
 
 ### Verification links
 
@@ -50,15 +55,24 @@ Read the complete 17-page author-hosted PDF, including methods, experiments, and
 - **Section 4.3, p. 8:** “temporal” smoothness concerns optimization iterations, not capture frame rate. Do not cite it as a video-cadence result.
 - **Sections 4.5 and 4.7, pp. 9 and 11–12:** geometric consistency, filtering, and fusion require cross-view support. Sparse registration is not the same process as dense-surface recovery.
 - **Section 5, pp. 12–14:** evaluates algorithm-component ablations and benchmark reconstruction; not our fixed-budget, global input-subset protocol. The existence of geometric view-selection literature means “viewpoints matter” itself is not a novelty claim.
-- **Bibliographic discrepancy:** the author-hosted PDF lists Pollefeys before Frahm, unlike the Crossref author order used in the current bibliography. Retain the publisher-metadata record provisionally and check the final proceedings before submission.
+- **Bibliographic discrepancy resolved 2026-10-07:** the author-hosted PDF puts Pollefeys before Frahm, but the final Springer chapter page explicitly lists Schönberger, Zheng, Frahm, and Pollefeys, matching Crossref. The bibliography follows the final proceedings order and pages 501–518. Verified source: <https://link.springer.com/chapter/10.1007/978-3-319-46487-9_31>.
 
-### Remaining review work
+### Full-text review: Image Acquisition and Model Selection for Multi-View Stereo
 
-1. Read the remaining complete cited papers and record relevant method/evaluation passages; full-text review covers [2, 7–9], with detailed notes in [[subset-keyframe-review]].
-2. Extend direct image-subset/keyframe coverage to earlier photogrammetric selection work and modern video extraction studies; review controlled overlap/baseline studies.
-3. Review modern smartphone photogrammetry studies, including compression, rolling shutter, blur, and calibration effects.
-4. Verify the novelty claim against that literature; retain only descriptive contributions meanwhile.
-5. Extend independent alignment checks: the completed Helenenschacht diagnostic confirms strong surface-alignment sensitivity, while the five tested grid phases change scores little. See [[helenenschacht-alignment-sensitivity]].
+Read the complete eight-page publisher PDF on 2026-10-07. Source: <https://isprs-archives.copernicus.org/articles/XL-5-W1/251/2013/isprsarchives-XL-5-W1-251-2013.pdf>. SHA-256: `98bacb85205c2e0e66796fcc00e8d6cfde6dc7c0896d4d8d864a4e723fab103b`.
+
+- **Sections 2.1–2.2, pp. 253–255:** small baselines can aid matching but weaken depth precision; larger baselines improve geometry while reducing similarity and increasing matching failure, especially on tilted surfaces. Multiple complementary stereo models can reduce noise and reject outliers.
+- **Section 2.3, pp. 255–256:** orientation errors affect reconstructed surfaces despite successful SfM; structured-light reference comparisons show baseline and redundancy effects. Their alignment and noise measures are different from our occupancy metric.
+- **Section 3, pp. 256–258:** the proposed “one panorama each step” strategy preserves overlapping stations and multiple heights, rather than pursuing the fewest images. The paper expressly cautions against gaps. Do not interpret our burst results as evidence that extra overlap is intrinsically harmful.
+- **Scope:** SURE/VisualSFM and the evaluated scenes differ from our COLMAP ablation. Their acquisition examples and numerical overlap suggestions do not validate our 97% recall or 80% occupancy bands.
+
+### Metadata conventions and retained review scope
+
+- ETH3D's official CVF record gives pages 3260–3269; the IEEE Crossref record gives 2538–2547 for the same DOI. The manuscript/BibTeX consistently retain the verified CVF proceedings pagination. These are alternative proceedings records, not different papers.
+- Tanks and Temples uses Crossref's 1–13 pagination; article-number metadata was not required or inferred.
+- All cited identities, author order, year, and available page/volume fields were checked on 2026-10-07. This does not constitute full-text review of the five background-only sources.
+- A broader systematic search, earlier photogrammetric selectors, and modern smartphone/video studies remain useful future work if the project pursues stronger novelty or capture guidance. The finished report instead retains a descriptive contribution and no universal recommendations.
+- Barn's start-burst camera residual was audited from existing artifacts; independent alignment and an equivalent surface-refinement campaign remain limitations, not implicitly completed checks. See [[supplementary-results]] and [[helenenschacht-alignment-sensitivity]].
 
 ## Related Pages
 
@@ -69,4 +83,4 @@ Read the complete 17-page author-hosted PDF, including methods, experiments, and
 
 ## Source Notes
 
-`references.bib` stores nine citation records. The initial six-reference abstract/metadata pass was extended on 2026-10-04 by full-text reviews of Snavely et al. (2008), Azimi et al. (2022), and Hosseininaveh and Remondino (2021). Their publication identities were checked through Crossref and PDF title pages; source hashes and detailed distinctions are recorded in `subset-keyframe-review.md`. Metadata omitted from the BibTeX was not guessed. The initial literature pass does not support universal capture thresholds or a validated perceptual detail metric.
+`references.bib` stores ten citation records. The initial six-reference abstract/metadata pass was extended on 2026-10-04 by full-text reviews of Snavely et al. (2008), Azimi et al. (2022), and Hosseininaveh and Remondino (2021). Their publication identities were checked through Crossref and PDF title pages; source hashes and detailed distinctions are recorded in `subset-keyframe-review.md`. A fifth full-text review (Wenzel et al., 2013) and final metadata pass were completed on 2026-10-07. Metadata omitted from the BibTeX was not guessed. The targeted review does not support universal capture thresholds or a validated perceptual detail metric.

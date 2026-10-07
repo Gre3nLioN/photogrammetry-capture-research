@@ -1,47 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="670" viewBox="0 0 1300 670">
-<rect width="100%" height="100%" fill="#fbfaf7"/>
-<style>text{font-family:Arial,sans-serif;fill:#24313a} .title{font-size:24px;font-weight:700}.label{font-size:16px}.small{font-size:13px}.axis{stroke:#8d989d;stroke-width:1}.threshold{stroke:#b34d4d;stroke-width:2;stroke-dasharray:7 5}</style>
-<text x="80" y="42" class="title">Baseline-relative recall and normalized fine occupancy</text>
-<text x="80" y="66" class="small">Frozen evaluator; higher is better. Helenenschacht is an external aerial-scene check.</text>
-<line x1="100" y1="490.0" x2="1000" y2="490.0" class="axis" opacity=".25"/>
-<text x="88" y="495.0" text-anchor="end" class="small">0%</text>
-<line x1="100" y1="410.0" x2="1000" y2="410.0" class="axis" opacity=".25"/>
-<text x="88" y="415.0" text-anchor="end" class="small">20%</text>
-<line x1="100" y1="330.0" x2="1000" y2="330.0" class="axis" opacity=".25"/>
-<text x="88" y="335.0" text-anchor="end" class="small">40%</text>
-<line x1="100" y1="250.0" x2="1000" y2="250.0" class="axis" opacity=".25"/>
-<text x="88" y="255.0" text-anchor="end" class="small">60%</text>
-<line x1="100" y1="170.0" x2="1000" y2="170.0" class="axis" opacity=".25"/>
-<text x="88" y="175.0" text-anchor="end" class="small">80%</text>
-<line x1="100" y1="90.0" x2="1000" y2="90.0" class="axis" opacity=".25"/>
-<text x="88" y="95.0" text-anchor="end" class="small">100%</text>
-<line x1="100" y1="102.0" x2="1000" y2="102.0" class="threshold"/>
-<text x="1008" y="107.0" class="small">completeness threshold (97%)</text>
-<line x1="100" y1="170.0" x2="1000" y2="170.0" class="threshold"/>
-<text x="1008" y="175.0" class="small">detail threshold (80%)</text>
-<rect x="155" y="92.0" width="38" height="398.0" rx="3" fill="#537fa3"/>
-<text x="174" y="85.0" text-anchor="middle" class="small">99.5</text>
-<rect x="203" y="166.39999999999998" width="38" height="323.6" rx="3" fill="#2d9d78"/>
-<text x="222" y="159.39999999999998" text-anchor="middle" class="small">80.9</text>
-<text x="197" y="518" text-anchor="middle" class="label">Barn stride 3</text>
-<rect x="370" y="96.39999999999998" width="38" height="393.6" rx="3" fill="#537fa3"/>
-<text x="389" y="89.39999999999998" text-anchor="middle" class="small">98.4</text>
-<rect x="418" y="210.39999999999998" width="38" height="279.6" rx="3" fill="#d69b32"/>
-<text x="437" y="203.39999999999998" text-anchor="middle" class="small">69.9</text>
-<text x="412" y="518" text-anchor="middle" class="label">Barn stride 4</text>
-<rect x="585" y="102.39999999999998" width="38" height="387.6" rx="3" fill="#537fa3"/>
-<text x="604" y="95.39999999999998" text-anchor="middle" class="small">96.9</text>
-<rect x="633" y="217.60000000000002" width="38" height="272.4" rx="3" fill="#d69b32"/>
-<text x="652" y="210.60000000000002" text-anchor="middle" class="small">68.1</text>
-<text x="627" y="518" text-anchor="middle" class="label">Barn stride 5</text>
-<rect x="800" y="207.60000000000002" width="38" height="282.4" rx="3" fill="#537fa3"/>
-<text x="819" y="200.60000000000002" text-anchor="middle" class="small">70.6</text>
-<rect x="848" y="475.6" width="38" height="14.400000000000002" rx="3" fill="#c65353"/>
-<text x="867" y="468.6" text-anchor="middle" class="small">3.6</text>
-<text x="842" y="518" text-anchor="middle" class="label">Helenenschacht stride 2</text>
-<rect x="80" y="550" width="16" height="16" fill="#537fa3"/><text x="104" y="564" class="label">reference-surface recall</text>
-<rect x="320" y="550" width="16" height="16" fill="#2d9d78"/><text x="344" y="564" class="label">normalized fine occupancy</text>
-<text x="80" y="595" class="small">Note: full Helenenschacht reconstruction is the practical reference; this is not absolute geometric ground truth.</text>
-<text x="80" y="622" class="label">Helenenschacht diagnostic surface refinement: recall 83.79%; fine occupancy 51.33% (not replacement scores).</text>
-<text x="80" y="648" class="small">The original 3.62% occupancy is alignment-sensitive, not a pure detail-loss estimate. Refinement worsens camera agreement.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1080" viewBox="0 0 1200 1080" role="img" aria-labelledby="title desc">
+<title id="title">Equal-budget Barn conditions: reference recall and fine occupancy</title>
+<desc id="desc">Thirteen conditions retain 103 images each. Blue circles show reference recall, orange squares show normalized fine occupancy. Burst at start has a camera-alignment residual 31.5 times the fine cell width, so its low scores do not isolate missing geometry.</desc>
+<rect width="1200" height="1080" fill="white"/>
+<style>text{font-family:Arial,sans-serif;fill:#202a35;font-size:24px}.title{font-size:30px;font-weight:700}.small{font-size:22px}.grid{stroke:#b9c1c9;stroke-width:1}.link{stroke:#818b96;stroke-width:3}.recall{fill:#245b8a;stroke:#245b8a}.occupancy{fill:#b96d17;stroke:#b96d17}.threshold{stroke:#6b737c;stroke-width:2;stroke-dasharray:8 6}</style>
+<text x="40" y="46" class="title">Same image budget, different reference agreement</text>
+<text x="40" y="82">Barn: 103 images per condition; frozen camera-center alignment</text>
+<g class="grid"><line x1="360" y1="155" x2="360" y2="875"/><line x1="488" y1="155" x2="488" y2="875"/><line x1="616" y1="155" x2="616" y2="875"/><line x1="744" y1="155" x2="744" y2="875"/><line x1="872" y1="155" x2="872" y2="875"/><line x1="1000" y1="155" x2="1000" y2="875"/></g>
+<line x1="872" y1="155" x2="872" y2="875" class="threshold"/>
+<line x1="980.8" y1="155" x2="980.8" y2="875" class="threshold"/>
+<text x="872" y="130" text-anchor="end" class="small">80% occupancy</text>
+<text x="980.8" y="155" text-anchor="end" class="small">97% recall</text>
+<text x="40" y="198">Uniform stride 4</text><line x1="807.4" y1="190" x2="989.6" y2="190" class="link"/><rect x="800.4" y="183" width="14" height="14" class="occupancy"/><circle cx="989.6" cy="190" r="8" class="recall"/>
+<text x="40" y="253">Sector 0 omitted</text><line x1="750.5" y1="245" x2="975.3" y2="245" class="link"/><rect x="743.5" y="238" width="14" height="14" class="occupancy"/><circle cx="975.3" cy="245" r="8" class="recall"/>
+<text x="40" y="308">Sector 3 omitted</text><line x1="810.0" y1="300" x2="986.2" y2="300" class="link"/><rect x="803.0" y="293" width="14" height="14" class="occupancy"/><circle cx="986.2" cy="300" r="8" class="recall"/>
+<text x="40" y="363">Sector 6 omitted</text><line x1="816.0" y1="355" x2="992.1" y2="355" class="link"/><rect x="809.0" y="348" width="14" height="14" class="occupancy"/><circle cx="992.1" cy="355" r="8" class="recall"/>
+<text x="40" y="418">Sectors 0–1 omitted</text><line x1="728.4" y1="410" x2="959.2" y2="410" class="link"/><rect x="721.4" y="403" width="14" height="14" class="occupancy"/><circle cx="959.2" cy="410" r="8" class="recall"/>
+<text x="40" y="473">Sectors 3–4 omitted</text><line x1="801.4" y1="465" x2="928.4" y2="465" class="link"/><rect x="794.4" y="458" width="14" height="14" class="occupancy"/><circle cx="928.4" cy="465" r="8" class="recall"/>
+<text x="40" y="528">Sectors 6–7 omitted</text><line x1="796.6" y1="520" x2="986.7" y2="520" class="link"/><rect x="789.6" y="513" width="14" height="14" class="occupancy"/><circle cx="986.7" cy="520" r="8" class="recall"/>
+<text x="40" y="583">Start route gap</text><line x1="799.8" y1="575" x2="986.2" y2="575" class="link"/><rect x="792.8" y="568" width="14" height="14" class="occupancy"/><circle cx="986.2" cy="575" r="8" class="recall"/>
+<text x="40" y="638">Middle route gap</text><line x1="804.1" y1="630" x2="987.7" y2="630" class="link"/><rect x="797.1" y="623" width="14" height="14" class="occupancy"/><circle cx="987.7" cy="630" r="8" class="recall"/>
+<text x="40" y="693">End route gap</text><line x1="799.0" y1="685" x2="991.6" y2="685" class="link"/><rect x="792.0" y="678" width="14" height="14" class="occupancy"/><circle cx="991.6" cy="685" r="8" class="recall"/>
+<rect x="28" y="720" width="1100" height="50" fill="#f6eee2"/>
+<text x="40" y="748">Burst at start*</text><line x1="383.3" y1="740" x2="547.9" y2="740" class="link"/><rect x="376.3" y="733" width="14" height="14" class="occupancy"/><circle cx="547.9" cy="740" r="8" class="recall"/>
+<text x="570" y="748" class="small">*large camera residual</text>
+<text x="40" y="803">Burst in middle</text><line x1="783.8" y1="795" x2="979.2" y2="795" class="link"/><rect x="776.8" y="788" width="14" height="14" class="occupancy"/><circle cx="979.2" cy="795" r="8" class="recall"/>
+<text x="40" y="858">Burst at end</text><line x1="759.6" y1="850" x2="966.1" y2="850" class="link"/><rect x="752.6" y="843" width="14" height="14" class="occupancy"/><circle cx="966.1" cy="850" r="8" class="recall"/>
+<g text-anchor="middle"><text x="360" y="914">0</text><text x="488" y="914">20</text><text x="616" y="914">40</text><text x="744" y="914">60</text><text x="872" y="914">80</text><text x="1000" y="914">100%</text></g>
+<circle cx="58" cy="955" r="8" class="recall"/><text x="80" y="963">Reference recall</text><rect x="353" y="948" width="14" height="14" class="occupancy"/><text x="381" y="963">Normalized fine occupancy</text>
+<text x="40" y="1010" class="small">*Camera-center RMSE / fine cell width = 31.46; low scores combine geometry and alignment.</text>
+<text x="40" y="1045" class="small">Dashed lines are exploratory bands, not validated quality thresholds; region rule also applies.</text>
 </svg>

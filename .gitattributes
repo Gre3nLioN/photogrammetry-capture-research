@@ -1,0 +1,2 @@
+# PDF streams are binary even when their first 8 KB contain mostly readable text.
+*.pdf binary

@@ -1,8 +1,19 @@
+---
+title: Core Study Summary — Barn Capture Budget, Coverage, and Cadence
+type: synthesis
+tags: [life, work, photogrammetry, research]
+created: 2026-10-07
+updated: 2026-10-07
+sources: [Barn experiment artifacts]
+---
+
 # Core Study Summary — Barn Capture Budget, Coverage, and Cadence
+
+A descriptive ablation of image count and distribution under one fixed CUDA COLMAP recipe, using all 410 Barn images as a reconstructed reference.
 
 ## Objective
 
-Estimate how a realistic phone capture budget affects complete-object coverage and retained detail. The controlled reference uses all 410 Barn images and the fixed CUDA COLMAP pipeline.
+Compare internal screening, one-way dense-reference agreement, and spatial occupancy under deterministic capture reductions. This is not an actual phone-video study or a validated minimum-budget estimate.
 
 ## Evaluation
 
@@ -34,14 +45,22 @@ Estimate how a realistic phone capture budget affects complete-object coverage a
 
 ## Findings
 
-1. A uniformly distributed 33% capture remains good; 25% preserves the object but loses measurable detail; 20% is warning-level.
-2. Equal image counts do not imply equal reconstruction quality. Missing sectors are scene-position dependent.
-3. Contiguous route gaps preserved the Barn as an object, but all degraded detail.
-4. Uneven video-like sampling is the most dangerous condition. A burst at the beginning lost most of the reference object despite retaining 103 images.
-5. Internal COLMAP consistency can remain `good` while the complete-object task result is warning or poor.
+1. A uniform 33% subset meets the exploratory recall/occupancy bands; 25% meets completeness but not preserved occupancy; 20% is warning-level. These are operational labels, not demonstrated usability or perceptual detail loss.
+2. Equal image counts produce different reference scores. The remaining equal-budget conditions still span 88.8–98.8% recall when the extreme start burst is set aside descriptively.
+3. All route gaps meet the completeness rule but have fine occupancy near 69%.
+4. The start burst has 29.4% recall and 3.6% occupancy **and camera-center RMSE 3.0145 scene units, 31.46 times the fine voxel width**. The scores cannot be attributed solely to genuinely missing geometry or a cadence-only mechanism.
+5. Internal screening can remain `good` while the derived reference-based verdict is warning or poor. Neither verdict establishes downstream task quality.
 
 ## Practical conclusion
 
-For this Barn scene and recipe, a modern phone capture should prioritize **distributed, distinct viewpoints** over nominal image count. A roughly one-third uniform sample was good; one-quarter was usable but detail-degraded. Redundant bursts and missing angular coverage can be substantially worse than uniform temporal reduction.
+For this Barn scene and recipe, count alone does not predict reference agreement. A one-third subset meets the declared bands, while a one-quarter subset does not meet preserved occupancy. Useful complementary overlap should not be eliminated indiscriminately. No phone-specific fraction, actual frame rate, perceptual usefulness, or universal minimum is established.
 
-These are scene- and protocol-specific findings, not universal minimums.
+## Related Pages
+
+- [[manuscript]]
+- [[supplementary-results]]
+- [[manuscript-audit]]
+
+## Source Notes
+
+The table preserves all frozen measurements and classifications. The final interpretation was narrowed on 2026-10-07 after the alignment-residual audit; no evaluator or comparison artifact was rewritten. “Completeness” and “detail fidelity” are historical metric labels for reference recall and spatial occupancy, not independently validated physical or perceptual quality.
