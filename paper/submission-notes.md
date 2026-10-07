@@ -9,14 +9,14 @@ sources: [ISPRS author guidelines January 2024, final exploratory manuscript]
 
 # Publication Route and Author Checklist
 
-The completed manuscript is a neutral-format exploratory technical report, with a conditional ISPRS workshop route rather than an unsupported claim of journal or conference readiness.
+**Archived guidance — not an active submission plan.** On 2026-10-07, Ivan Roumec clarified that this was a personal test of ideas and will not be submitted to a venue. The completed report credits him as an independent researcher and acknowledges Codex/AI assistance. No submission actions are pending; the earlier conditional guidance below is retained for reference.
 
 ## Key Points
 
 - The report is complete within its descriptive scope; no new reconstruction campaign is required to finish that version.
 - It is not peer reviewed, accepted, submitted, or already formatted as an official ISPRS paper.
-- Recommended next scholarly route: a suitably scoped ISPRS workshop publishing in the Archives, subject to the selected event's call and review rules.
-- Author identity and event-specific requirements must be supplied before an actual submission.
+- The author has chosen not to pursue formal submission; workshop guidance below is optional historical material.
+- Author name and contact have been supplied and added to the report; Codex/AI is acknowledged as assistance, not co-authorship.
 
 ## Details
 

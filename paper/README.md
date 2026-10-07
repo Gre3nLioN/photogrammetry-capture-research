@@ -6,12 +6,12 @@
 - **Editable source:** [Markdown manuscript](manuscript.md)
 - **Frozen supplementary data:** [Multi-scale scores, alignment ratios, experiment IDs, and hashes](supplementary-results.md)
 - **Final audit:** [Numerical, methodological, bibliographic, and rendering checks](manuscript-audit.md)
-- **Publication route:** [Venue recommendation and author/submission checklist](submission-notes.md)
+- **Historical publication notes:** [Optional venue guidance](submission-notes.md) — not being pursued.
 - **References:** [BibTeX](references.bib), [evidence map](literature-review.md), and [subset/keyframe full-text notes](subset-keyframe-review.md)
 
 ## Status and scope
 
-Completed on 7 October 2026 as an exploratory technical report. It is **not peer reviewed, submitted, accepted, or formatted as an official conference paper**. Author identity/affiliation and required declarations have not been guessed. A suitable ISPRS workshop/Archives route is recommended conditionally, with general guidelines verified; no live event or deadline was selected.
+Completed on 7 October 2026 as a personal exploratory technical report by **Ivan Roumec**, Independent researcher; contact: ivanroumec@gmail.com. **Codex/AI assistance is acknowledged in the manuscript, not listed as co-authorship.** It is not peer reviewed or submitted, and the author does not intend to submit it to a venue. The report and public repository are the final deliverable.
 
 The report includes all 16 Barn conditions, the Helenenschacht frozen/refined comparison, mathematical metric definitions, alignment diagnostics, public/local replication boundaries, and ten verified citation identities. All main and supplementary Barn rows and comparison-file hashes were checked against the unchanged artifacts.
 
@@ -56,6 +56,6 @@ magick paper/figures/helenenschacht-alignment-overlays.png \
 
 No new public sensitivity scripts or test code are included. The original evaluator, classifications, and reconstruction measurements remain unchanged.
 
-## Next action
+## Completion
 
-The research deliverable can stop here. Actual scholarly submission requires author details, a live venue choice, the current venue template/citation format, any necessary anonymization, policy/declaration checks, and human approval. See [submission-notes.md](submission-notes.md); additional experiments should be driven by that venue's expectations, not presented as already completed.
+The personal report is complete. No venue selection, submission formatting, or administrative submission steps are pending. Scientific limitations remain documented; further research is optional. The earlier [submission notes](submission-notes.md) are retained only as historical guidance.

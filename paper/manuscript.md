@@ -1,5 +1,9 @@
 ---
 title: "Image Budget and Viewpoint Distribution in Photogrammetry: An Exploratory Study"
+author:
+  - name: Ivan Roumec
+    affiliation: Independent researcher
+    email: ivanroumec@gmail.com
 type: synthesis
 tags: [life, work, photogrammetry, research]
 created: 2026-10-03
@@ -227,6 +231,10 @@ Data use remains subject to upstream terms. Only derived report figures, not thi
 Under the tested Barn recipe, a 137-image uniform subset met the declared recall and fine-occupancy bands; a 103-image uniform subset met completeness but not preserved occupancy. Equal-budget subsets produced different reference agreement despite uniformly good internal screening. That variation persists when the extremely alignment-confounded start burst is set aside, although no pure geometry-loss mechanism is established.
 
 The Helenenschacht diagnostic further shows that reference metrics can change substantially with alignment while camera agreement worsens. Internal consistency, dense-reference recall, spatial occupancy, and alignment diagnostics should therefore be reported with distinct meanings and explicit limitations. This study establishes neither an exact minimum capture budget nor an optimal image selector, perceptual-quality metric, or general phone-video rule.
+
+## AI Assistance
+
+Codex/AI tools assisted with experiment planning, software development, analysis support, literature review, figure preparation, and manuscript drafting and editing. This was a personal exploratory project by Ivan Roumec to test ideas about photogrammetric capture, not research conducted on behalf of an institution. AI assistance is acknowledged here rather than credited as co-authorship; responsibility for the report remains with the human author. The report is not peer reviewed and is not intended for formal submission.
 
 ## Related Materials
 

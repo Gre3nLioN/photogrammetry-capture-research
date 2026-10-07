@@ -77,7 +77,7 @@ A broader or more demanding venue may require extra evidence. Those choices are 
 
 ### Actual submission requirements
 
-The technical-report version is complete. A real submission still needs confirmed author/contact/declaration details, a live suitable call, venue-specific template and citation conversion, anonymity/artifact-policy checks if applicable, and human approval. [[submission-notes]] documents the conditional ISPRS workshop route and its verified general guidelines. No submission, acceptance, preprint registration, or DOI minting was performed.
+The personal technical report is complete. Ivan Roumec subsequently supplied his publication name and contact email and clarified that he does not intend to submit it to any venue. He is credited as an independent researcher, with Codex/AI assistance disclosed separately. The PDF was rebuilt with this credit and disclosure; no scientific result changed. [[submission-notes]] is now explicitly archived guidance, not a pending task list. No submission, acceptance, preprint registration, or DOI minting was performed.
 
 ## Related Pages
 
